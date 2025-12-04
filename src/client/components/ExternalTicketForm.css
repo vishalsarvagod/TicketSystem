@@ -1,0 +1,244 @@
+.external-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+}
+
+.external-form-container {
+    background: white;
+    border-radius: 12px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.external-form-header {
+    padding: 25px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8f9fa;
+    border-radius: 12px 12px 0 0;
+}
+
+.external-form-header h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.external-ticket-form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.form-scroll-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 25px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+.form-group.required label {
+    position: relative;
+}
+
+.required-asterisk {
+    color: #e74c3c;
+    margin-left: 4px;
+}
+
+.form-group input[type='text'],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-group input[type='text']:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group small {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.checkbox-group {
+    margin-top: 10px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: normal;
+    margin: 0;
+}
+
+.checkbox-label input[type='checkbox'] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.checkbox-label span {
+    color: #2c3e50;
+    font-size: 14px;
+}
+
+.external-form-actions {
+    padding: 20px 25px;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 10px;
+    background: #f8f9fa;
+    border-radius: 0 0 12px 12px;
+}
+
+.external-form-actions button {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+    flex: 1;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: #2980b9;
+}
+
+.btn-primary:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    background: #f39c12;
+    color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+    background: #e67e22;
+}
+
+.btn-secondary:disabled {
+    background: #95a5a6;
+    cursor: not-allowed;
+}
+
+.btn-cancel {
+    background: #e9ecef;
+    color: #495057;
+}
+
+.btn-cancel:hover:not(:disabled) {
+    background: #dee2e6;
+}
+
+.btn-cancel:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Scrollbar Styling */
+.form-scroll-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.form-scroll-container::-webkit-scrollbar-track {
+    background: #f8f9fa;
+}
+
+.form-scroll-container::-webkit-scrollbar-thumb {
+    background: #dee2e6;
+    border-radius: 4px;
+}
+
+.form-scroll-container::-webkit-scrollbar-thumb:hover {
+    background: #adb5bd;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .external-form-container {
+        max-height: 95vh;
+    }
+
+    .external-form-header {
+        padding: 20px;
+    }
+
+    .form-scroll-container {
+        padding: 20px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .external-form-actions {
+        flex-direction: column;
+    }
+
+    .external-form-actions button {
+        width: 100%;
+    }
+}

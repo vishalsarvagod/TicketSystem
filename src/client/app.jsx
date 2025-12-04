@@ -1,102 +1,208 @@
-import React, { useState, useEffect, useMemo } from 'react'
-import { IncidentService } from './services/IncidentService'
-import IncidentList from './components/IncidentList'
-import IncidentForm from './components/IncidentForm'
+import React, { useState, useMemo } from 'react'
+import { ExternalTicketService } from './services/ExternalTicketService'
+import Sidebar from './components/Sidebar'
+import Dashboard from './components/Dashboard'
+import TicketListView from './components/TicketListView'
+import TicketDetail from './components/TicketDetail'
+import ExternalTicketForm from './components/ExternalTicketForm'
 import './app.css'
 
 export default function App() {
-    const [incidents, setIncidents] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [showForm, setShowForm] = useState(false)
-    const [selectedIncident, setSelectedIncident] = useState(null)
-    const [error, setError] = useState(null)
+    const [activeView, setActiveView] = useState('dashboard')
+    const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+    const [showTicketDetail, setShowTicketDetail] = useState(false)
+    const [showTicketForm, setShowTicketForm] = useState(false)
+    const [selectedTicket, setSelectedTicket] = useState(null)
+    const [refreshTrigger, setRefreshTrigger] = useState(0)
 
-    const incidentService = useMemo(() => new IncidentService(), [])
+    const externalTicketService = useMemo(() => new ExternalTicketService(), [])
 
-    const refreshIncidents = async () => {
-        try {
-            setLoading(true)
-            setError(null)
-            const data = await incidentService.list()
-            setIncidents(data)
-        } catch (err) {
-            setError('Failed to load incidents: ' + (err.message || 'Unknown error'))
-            console.error(err)
-        } finally {
-            setLoading(false)
-        }
+    const handleViewChange = (view) => {
+        setActiveView(view)
     }
 
-    useEffect(() => {
-        void refreshIncidents()
-    }, [])
-
-    const handleCreateClick = () => {
-        setSelectedIncident(null)
-        setShowForm(true)
+    const handleSidebarToggle = () => {
+        setSidebarCollapsed(!sidebarCollapsed)
     }
 
-    const handleEditClick = (incident) => {
-        setSelectedIncident(incident)
-        setShowForm(true)
+    const handleViewDetails = (ticket) => {
+        setSelectedTicket(ticket)
+        setShowTicketDetail(true)
     }
 
-    const handleFormClose = () => {
-        setShowForm(false)
-        setSelectedIncident(null)
+    const handleEdit = (ticket) => {
+        setSelectedTicket(ticket)
+        setShowTicketDetail(false)
+        setShowTicketForm(true)
+    }
+
+    const handleCreateTicket = () => {
+        setSelectedTicket(null)
+        setShowTicketForm(true)
     }
 
     const handleFormSubmit = async (formData) => {
-        setLoading(true)
         try {
-            if (selectedIncident) {
-                const sysId =
-                    typeof selectedIncident.sys_id === 'object'
-                        ? selectedIncident.sys_id.value
-                        : selectedIncident.sys_id
-                await incidentService.update(sysId, formData)
+            if (selectedTicket) {
+                await externalTicketService.updateTicket(selectedTicket.id, formData)
             } else {
-                await incidentService.create(formData)
+                await externalTicketService.createTicket(formData)
             }
-            setShowForm(false)
-            await refreshIncidents()
-        } catch (err) {
-            setError('Failed to save incident: ' + (err.message || 'Unknown error'))
-            console.error(err)
-        } finally {
-            setLoading(false)
+            setShowTicketForm(false)
+            setSelectedTicket(null)
+            setRefreshTrigger((prev) => prev + 1)
+        } catch (error) {
+            console.error('Form submit error:', error)
+            throw error
+        }
+    }
+
+    const handleSync = async (ticket) => {
+        if (confirm('Sync this ticket to ServiceNow?')) {
+            try {
+                await externalTicketService.createServiceNowIncident({
+                    title: ticket.title,
+                    description: ticket.description,
+                    priority: ticket.priority,
+                    category: ticket.category,
+                })
+                alert('Ticket synced to ServiceNow successfully!')
+                setRefreshTrigger((prev) => prev + 1)
+            } catch (error) {
+                alert('Failed to sync to ServiceNow: ' + error.message)
+            }
+        }
+    }
+
+    const handleDelete = async (ticket) => {
+        if (confirm('Are you sure you want to delete this ticket?')) {
+            try {
+                await externalTicketService.deleteTicket(ticket.id)
+                setShowTicketDetail(false)
+                setRefreshTrigger((prev) => prev + 1)
+            } catch (error) {
+                alert('Failed to delete ticket: ' + error.message)
+            }
+        }
+    }
+
+    const handleRefreshTicket = () => {
+        setRefreshTrigger((prev) => prev + 1)
+    }
+
+    const renderMainContent = () => {
+        // If create ticket view is active, show the form
+        if (activeView === 'create-ticket') {
+            return (
+                <div className="create-ticket-view">
+                    <ExternalTicketForm
+                        ticket={null}
+                        onSubmit={handleFormSubmit}
+                        onCancel={() => setActiveView('dashboard')}
+                        externalTicketService={externalTicketService}
+                    />
+                </div>
+            )
+        }
+
+        switch (activeView) {
+            case 'dashboard':
+                return <Dashboard externalTicketService={externalTicketService} />
+
+            case 'all-tickets':
+                return (
+                    <TicketListView
+                        key={`all-${refreshTrigger}`}
+                        externalTicketService={externalTicketService}
+                        onViewDetails={handleViewDetails}
+                        onEdit={handleEdit}
+                        onSync={handleSync}
+                        onDelete={handleDelete}
+                        filterType="all"
+                    />
+                )
+
+            case 'my-tickets':
+                return (
+                    <TicketListView
+                        key={`my-${refreshTrigger}`}
+                        externalTicketService={externalTicketService}
+                        onViewDetails={handleViewDetails}
+                        onEdit={handleEdit}
+                        onSync={handleSync}
+                        onDelete={handleDelete}
+                        filterType="my-tickets"
+                    />
+                )
+
+            case 'high-priority':
+                return (
+                    <TicketListView
+                        key={`high-${refreshTrigger}`}
+                        externalTicketService={externalTicketService}
+                        onViewDetails={handleViewDetails}
+                        onEdit={handleEdit}
+                        onSync={handleSync}
+                        onDelete={handleDelete}
+                        filterType="high-priority"
+                    />
+                )
+
+            case 'sync-status':
+                return (
+                    <div className="placeholder-view">
+                        <h2>🔄 Sync Status</h2>
+                        <p>View synchronization status with ServiceNow</p>
+                    </div>
+                )
+
+            case 'settings':
+                return (
+                    <div className="placeholder-view">
+                        <h2>⚙️ Settings</h2>
+                        <p>Configure application settings</p>
+                    </div>
+                )
+
+            default:
+                return <Dashboard externalTicketService={externalTicketService} />
         }
     }
 
     return (
-        <div className="incident-app">
-            <header className="app-header">
-                <h1>Incident Response Manager</h1>
-                <button className="create-button" onClick={handleCreateClick}>
-                    Create New Incident
-                </button>
-            </header>
+        <div className="external-ticket-app">
+            <Sidebar
+                activeView={activeView}
+                onViewChange={handleViewChange}
+                isCollapsed={sidebarCollapsed}
+                onToggle={handleSidebarToggle}
+            />
 
-            {error && (
-                <div className="error-message">
-                    {error}
-                    <button onClick={() => setError(null)}>Dismiss</button>
-                </div>
-            )}
+            <main className={`main-content ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
+                {renderMainContent()}
+            </main>
 
-            {loading ? (
-                <div className="loading">Loading...</div>
-            ) : (
-                <IncidentList
-                    incidents={incidents}
-                    onEdit={handleEditClick}
-                    onRefresh={refreshIncidents}
-                    service={incidentService}
+            {showTicketDetail && selectedTicket && (
+                <TicketDetail
+                    ticket={selectedTicket}
+                    onClose={() => setShowTicketDetail(false)}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onRefresh={handleRefreshTicket}
+                    externalTicketService={externalTicketService}
                 />
             )}
 
-            {showForm && (
-                <IncidentForm incident={selectedIncident} onSubmit={handleFormSubmit} onCancel={handleFormClose} />
+            {showTicketForm && (
+                <ExternalTicketForm
+                    ticket={selectedTicket}
+                    onSubmit={handleFormSubmit}
+                    onCancel={() => {
+                        setShowTicketForm(false)
+                        setSelectedTicket(null)
+                    }}
+                    externalTicketService={externalTicketService}
+                />
             )}
         </div>
     )
