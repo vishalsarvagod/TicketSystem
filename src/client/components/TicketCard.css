@@ -151,6 +151,17 @@
     display: inline-block;
 }
 
+.servicenow-badge.clickable {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.servicenow-badge.clickable:hover {
+    background: #1976d2;
+    color: white;
+    transform: scale(1.05);
+}
+
 .ticket-tags {
     display: flex;
     flex-wrap: wrap;
@@ -217,6 +228,15 @@
 
 .btn-sync:hover {
     background: #8e44ad;
+}
+
+.btn-servicenow {
+    background: #1976d2;
+    color: white;
+}
+
+.btn-servicenow:hover {
+    background: #1565c0;
 }
 
 .btn-delete {

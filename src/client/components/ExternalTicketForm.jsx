@@ -56,8 +56,18 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
             }
 
             if (createInServiceNow && !isEditing) {
-                // Create in ServiceNow
-                await externalTicketService.createServiceNowIncident(ticketData)
+                // Create in ServiceNow and get the incident details
+                const result = await externalTicketService.createServiceNowIncident(ticketData)
+                
+                // Show success message with incident number
+                if (result.number || result.sys_id) {
+                    const incidentNumber = result.number || 'Created'
+                    const message = `Ticket created and synced to ServiceNow!\nIncident Number: ${incidentNumber}`
+                    alert(message)
+                }
+                
+                // Close the form and refresh
+                await onSubmit(ticketData)
             } else {
                 // Regular create/update
                 await onSubmit(ticketData)

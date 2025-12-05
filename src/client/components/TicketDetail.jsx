@@ -89,6 +89,18 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
         }
     }
 
+    const openInServiceNow = () => {
+        if (ticket.serviceNowSysId) {
+            // Open ServiceNow incident record by sys_id
+            const url = `/incident.do?sys_id=${ticket.serviceNowSysId}`
+            window.open(url, '_blank')
+        } else if (ticket.serviceNowNumber) {
+            // Open ServiceNow incident by number
+            const url = `/incident_list.do?sysparm_query=number=${ticket.serviceNowNumber}`
+            window.open(url, '_blank')
+        }
+    }
+
     return (
         <div className="ticket-detail-overlay" onClick={onClose}>
             <div className="ticket-detail-modal" onClick={(e) => e.stopPropagation()}>
@@ -111,6 +123,11 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
 
                 {/* Action Buttons */}
                 <div className="ticket-detail-actions">
+                    {ticket.serviceNowNumber && (
+                        <button className="action-btn servicenow-btn" onClick={openInServiceNow}>
+                            🔗 Open in ServiceNow
+                        </button>
+                    )}
                     <button className="action-btn edit-btn" onClick={() => onEdit(ticket)}>
                         ✏️ Edit
                     </button>
@@ -150,7 +167,13 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                     <tr>
                                         <td className="label">ServiceNow Number</td>
                                         <td className="value">
-                                            <span className="servicenow-badge">{ticket.serviceNowNumber}</span>
+                                            <span 
+                                                className="servicenow-badge clickable" 
+                                                onClick={openInServiceNow}
+                                                title="Click to open in ServiceNow"
+                                            >
+                                                {ticket.serviceNowNumber}
+                                            </span>
                                         </td>
                                     </tr>
                                 )}

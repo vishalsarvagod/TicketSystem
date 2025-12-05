@@ -46,6 +46,18 @@ export default function TicketCard({ ticket, onViewDetails, onEdit, onSync, onDe
         })
     }
 
+    const openInServiceNow = () => {
+        if (ticket.serviceNowSysId) {
+            // Open ServiceNow incident record by sys_id
+            const url = `/incident.do?sys_id=${ticket.serviceNowSysId}`
+            window.open(url, '_blank')
+        } else if (ticket.serviceNowNumber) {
+            // Open ServiceNow incident by number
+            const url = `/incident_list.do?sysparm_query=number=${ticket.serviceNowNumber}`
+            window.open(url, '_blank')
+        }
+    }
+
     return (
         <div className="ticket-card">
             <div className="ticket-card-header">
@@ -74,7 +86,13 @@ export default function TicketCard({ ticket, onViewDetails, onEdit, onSync, onDe
                     {ticket.serviceNowNumber && (
                         <div className="detail-row">
                             <span className="detail-label">ServiceNow:</span>
-                            <span className="detail-value servicenow-badge">{ticket.serviceNowNumber}</span>
+                            <span 
+                                className="detail-value servicenow-badge clickable" 
+                                onClick={openInServiceNow}
+                                title="Click to open in ServiceNow"
+                            >
+                                {ticket.serviceNowNumber}
+                            </span>
                         </div>
                     )}
                 </div>
@@ -91,6 +109,11 @@ export default function TicketCard({ ticket, onViewDetails, onEdit, onSync, onDe
             </div>
 
             <div className="ticket-card-footer">
+                {ticket.serviceNowNumber && (
+                    <button className="btn-servicenow" onClick={openInServiceNow} title="Open in ServiceNow">
+                        🔗 Open in ServiceNow
+                    </button>
+                )}
                 <button className="btn-view" onClick={() => onViewDetails(ticket)} title="View Details">
                     👁️ View
                 </button>

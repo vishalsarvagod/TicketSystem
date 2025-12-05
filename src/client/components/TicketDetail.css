@@ -138,6 +138,15 @@
     background: #5a6268;
 }
 
+.servicenow-btn {
+    background: #1976d2;
+    color: white;
+}
+
+.servicenow-btn:hover {
+    background: #1565c0;
+}
+
 .ticket-detail-content {
     flex: 1;
     overflow-y: auto;
@@ -204,6 +213,17 @@ section h3 {
     font-weight: 600;
     font-size: 13px;
     display: inline-block;
+}
+
+.servicenow-badge.clickable {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.servicenow-badge.clickable:hover {
+    background: #1976d2;
+    color: white;
+    transform: scale(1.05);
 }
 
 .tags-container {
