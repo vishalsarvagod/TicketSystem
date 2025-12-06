@@ -2,8 +2,8 @@ import '@servicenow/sdk/global'
 import { Table, StringColumn, DateTimeColumn, IntegerColumn } from '@servicenow/sdk/core'
 
 // Create the incident table for our application
-export const x_1860385_ticketda_incident = Table({
-    name: 'x_1860385_ticketda_incident',
+export const x_clone_ticketmgmt_incident = Table({
+    name: 'x_clone_ticketmgmt_incident',
     label: 'Incident',
     schema: {
         number: StringColumn({ 
