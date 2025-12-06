@@ -1,5 +1,5 @@
 {
-    "scope": "x_clone_ticketmgmt",
-    "scopeId": "11111111111111111111111111111111",
+    "scope": "x_extticket_v2",
+    "scopeId": "22222222222222222222222222222222",
     "name": "External Ticket Management"
 }

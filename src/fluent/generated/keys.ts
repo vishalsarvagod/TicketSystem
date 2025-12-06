@@ -34,16 +34,34 @@ declare global {
                     'x_clone_ticketmgmt/main': {
                         table: 'sys_ux_lib_asset'
                         id: '77659c94c69a4a798b2ec35b49bc1d0f'
+                        deleted: true
                     }
                     'x_clone_ticketmgmt/main.js.map': {
                         table: 'sys_ux_lib_asset'
                         id: 'fed0aec339dc4be68edc8bd9b2d22b20'
+                        deleted: true
+                    }
+                    'x_extticket_v2/main': {
+                        table: 'sys_ux_lib_asset'
+                        id: '4aeabf8858114eb9b43c2adad562360a'
+                    }
+                    'x_extticket_v2/main.js.map': {
+                        table: 'sys_ux_lib_asset'
+                        id: 'd6dfae85452d4dab9e83e5761d2812b9'
                     }
                 }
                 composite: [
                     {
                         table: 'ua_table_licensing_config'
+                        id: '02d61a2589ac4020bff4bf1a169b6dde'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                        }
+                    },
+                    {
+                        table: 'ua_table_licensing_config'
                         id: '043645e9f85a4b5094d98563b772ce6f'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                         }
@@ -59,8 +77,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '096641531b524f34a060fd62882f5564'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'number'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '0a0ff48488af4f0eab5ba0e31b5aa469'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'NULL'
@@ -68,8 +95,18 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '0e77140d24bb4f0ea72b261dec76f7a8'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'resolved_at'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '0e8b9b060a6c466291fc4042224f0fc4'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'resolved_at'
@@ -85,6 +122,29 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '1685ff948b454b54b0e44127a585e12d'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'short_description'
+                        }
+                    },
+                    {
+                        table: 'sys_db_object'
+                        id: '1a748836317f4317a61db4e2ca29baf6'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '1bcc27a02f7449ceb936bef4bf157f88'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'opened_at'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '214f36a26a0242f3b87cbea71e308637'
                         deleted: true
@@ -97,6 +157,7 @@ declare global {
                     {
                         table: 'sys_choice'
                         id: '23c013d71afa4643a1777649f4ddb476'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'priority'
@@ -124,6 +185,14 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '243a87aa040f446ea47b5dd36b948f69'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'NULL'
+                        }
+                    },
+                    {
                         table: 'sys_db_object'
                         id: '2944e3e4d040425eb643de0ef46a6185'
                         deleted: true
@@ -132,8 +201,26 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_choice_set'
+                        id: '30a0997d58ce425b9de694ce005aa76d'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'priority'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '37c1ac3cb12544f2acaab573249ad0d6'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'priority'
+                            value: '4'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '396cd681cb574e2e8b03f353ee86f799'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'resolved_at'
@@ -143,6 +230,7 @@ declare global {
                     {
                         table: 'sys_dictionary'
                         id: '3982b57f2cbc4cbebb89db49946369c3'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'short_description'
@@ -178,8 +266,35 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '40c1df34a8a641d9b155009b7a29639a'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'description'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '43eb2470eb7b419193b43e19852fee8c'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'status'
+                            value: 'in_progress'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: '48a40a08c0864111850dfcad58f06cf2'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'number'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '4a57c6a37c334fb6b389dfeacbf7ec30'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'status'
@@ -189,6 +304,7 @@ declare global {
                     {
                         table: 'sys_dictionary'
                         id: '4d34cbbe5ae04a808434fb120a2cd259'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'opened_at'
@@ -204,8 +320,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: '5239bd96bb4e454db8a55c3ed3259f3f'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'status'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: '53623e52a89f478d91cce1bc41321c9a'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'status'
@@ -213,8 +338,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_number'
+                        id: '54be545a539142d6af73344d81e37fdb'
+                        key: {
+                            category: 'x_extticket_v2_incident'
+                            prefix: 'INC'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: '59c45ff73a97497892cf5f42befd9c2f'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'status'
@@ -242,6 +376,7 @@ declare global {
                     {
                         table: 'sys_documentation'
                         id: '5e9973a1ee5446858bdc77ab5c538c2f'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'opened_at'
@@ -260,6 +395,7 @@ declare global {
                     {
                         table: 'sys_choice'
                         id: '63c6a2f4b10e4bf5978af8c04d906e0e'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'status'
@@ -269,13 +405,33 @@ declare global {
                     {
                         table: 'sys_db_object'
                         id: '668d85b82ca64ee997f9104d8985964f'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: '67b721d90ee940d7bceb5ef66142d514'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'status'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '6947c00ea47840f6bc6a86f61b4aa13e'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'priority'
+                            value: '2'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: '6a1ea19538a149b3a9c46b32329b4d0a'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'priority'
@@ -284,9 +440,27 @@ declare global {
                     {
                         table: 'sys_choice_set'
                         id: '6a71bba8a29d4a87b30e40733a08997b'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'status'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '6f5a8eb7e11a4523be7e464c3f0ec6f0'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'status'
+                            value: 'new'
+                        }
+                    },
+                    {
+                        table: 'sys_dictionary'
+                        id: '70f91307faa44401ab8da9993224457b'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'resolved_at'
                         }
                     },
                     {
@@ -302,6 +476,7 @@ declare global {
                     {
                         table: 'sys_number'
                         id: '75efb2ea9b344b3c8b6efc3172d130b8'
+                        deleted: true
                         key: {
                             category: 'x_clone_ticketmgmt_incident'
                             prefix: 'INC'
@@ -309,7 +484,17 @@ declare global {
                     },
                     {
                         table: 'sys_choice'
+                        id: '76caf19ef6654ed1a0dddd7326050acd'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'status'
+                            value: 'closed'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
                         id: '797cada57055443eb077c8e376f639a5'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'priority'
@@ -329,6 +514,7 @@ declare global {
                     {
                         table: 'sys_choice'
                         id: '7dea96f98df14a30901819fe332fdf93'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'priority'
@@ -338,6 +524,7 @@ declare global {
                     {
                         table: 'sys_documentation'
                         id: '7f6de5fccd2b478b886354b54dd4d710'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'priority'
@@ -347,6 +534,7 @@ declare global {
                     {
                         table: 'sys_choice'
                         id: '84f4a3bab9da4fe59368c1ea8a531e6a'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'status'
@@ -361,6 +549,15 @@ declare global {
                             name: 'x_1860385_ticketda_incident'
                             element: 'priority'
                             language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: '87b5bacd90d24c8c8ee1ba102f79cf06'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'priority'
+                            value: '3'
                         }
                     },
                     {
@@ -402,6 +599,24 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_choice'
+                        id: 'a887bafa9b8c4f3e8268cb37c0c6c62f'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'priority'
+                            value: '1'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'abc6c5ed15ca493596c5c08d1e8fc54f'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'description'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_choice_set'
                         id: 'ac4040fc15eb419c8396f3dc4f198e77'
                         deleted: true
@@ -412,7 +627,17 @@ declare global {
                     },
                     {
                         table: 'sys_documentation'
+                        id: 'aca4500f4d20450e95574e80b4184116'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'NULL'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
                         id: 'aed2b93bfeda47b2be30decfae1dfc50'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'number'
@@ -421,7 +646,17 @@ declare global {
                     },
                     {
                         table: 'sys_choice'
+                        id: 'afb1f23ba5e24b9bbbbfb276d183fd90'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'status'
+                            value: 'on_hold'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
                         id: 'b1219e3b3e1847f0b8940d50303f9a55'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'priority'
@@ -431,9 +666,28 @@ declare global {
                     {
                         table: 'sys_choice_set'
                         id: 'b5602e8a78d340489cf38a798bfe7182'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'priority'
+                        }
+                    },
+                    {
+                        table: 'sys_choice'
+                        id: 'b7f921ae6ca643f8865813924e0bcf29'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'status'
+                            value: 'resolved'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'bd3acc4d8e264119908eec45afddf53f'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'priority'
+                            language: 'en'
                         }
                     },
                     {
@@ -449,6 +703,7 @@ declare global {
                     {
                         table: 'sys_dictionary'
                         id: 'c5ebdba4e1724daf90d11129b9dd354b'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'number'
@@ -467,6 +722,7 @@ declare global {
                     {
                         table: 'sys_dictionary'
                         id: 'd3e4ced09b444cd6b54ad606da8545a0'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'NULL'
@@ -475,6 +731,7 @@ declare global {
                     {
                         table: 'sys_dictionary'
                         id: 'd4a37219d97f42ff84907a2e78fbc83f'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'status'
@@ -520,8 +777,17 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_choice_set'
+                        id: 'df3ec087ff8b46229e5215223865e6ab'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'status'
+                        }
+                    },
+                    {
                         table: 'sys_choice'
                         id: 'e1d66103438747bdb3127c948672b809'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'status'
@@ -539,6 +805,7 @@ declare global {
                     {
                         table: 'sys_documentation'
                         id: 'e497e13229614868b1191bf0f42098e8'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'short_description'
@@ -565,19 +832,47 @@ declare global {
                         }
                     },
                     {
+                        table: 'sys_documentation'
+                        id: 'ef90249d9b794b55a0fa54668c1d1d9b'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'opened_at'
+                            language: 'en'
+                        }
+                    },
+                    {
                         table: 'sys_dictionary'
                         id: 'f37843a301944134b962641c02ade124'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'description'
                         }
                     },
                     {
+                        table: 'sys_dictionary'
+                        id: 'f9859222d5ef441088923aa712658349'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'priority'
+                        }
+                    },
+                    {
                         table: 'sys_documentation'
                         id: 'faf1fc34ed6c4a7094f594aebbc0e92c'
+                        deleted: true
                         key: {
                             name: 'x_clone_ticketmgmt_incident'
                             element: 'description'
+                            language: 'en'
+                        }
+                    },
+                    {
+                        table: 'sys_documentation'
+                        id: 'fc53b3869eff48c383cbecaf66da4c09'
+                        key: {
+                            name: 'x_extticket_v2_incident'
+                            element: 'short_description'
                             language: 'en'
                         }
                     },
