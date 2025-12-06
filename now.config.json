@@ -1,4 +1,5 @@
 {
     "scope": "x_1860385_ticketda",
-    "name": "TicketDashboard"
+    "name": "TicketDashboard",
+    "version": "1.0.0"
 }
