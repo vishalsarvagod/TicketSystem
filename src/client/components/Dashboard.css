@@ -1,5 +1,5 @@
 .dashboard {
-    padding: 30px;
+    padding: 20px;
     max-width: 1400px;
     margin: 0 auto;
 }
@@ -19,18 +19,19 @@
 }
 
 .refresh-button {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 10px 20px;
+    background: #ecf0f1;
+    color: #2c3e50;
+    border: 1px solid #bdc3c7;
+    padding: 8px 16px;
     border-radius: 6px;
-    font-size: 14px;
+    font-size: 13px;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s;
 }
 
 .refresh-button:hover {
-    background: #2980b9;
+    background: #d5dbdb;
+    border-color: #95a5a6;
 }
 
 .dashboard-loading,

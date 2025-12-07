@@ -143,9 +143,6 @@ export default function TicketListView({
                         {filteredTickets.length} {filteredTickets.length === 1 ? 'ticket' : 'tickets'}
                     </span>
                 </div>
-                <button className="refresh-button" onClick={loadTickets} aria-label="Refresh tickets">
-                    🔄 Refresh
-                </button>
             </div>
 
             {/* Filters and Sorting */}

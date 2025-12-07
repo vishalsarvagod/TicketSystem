@@ -59,6 +59,12 @@ export default function App() {
             }
             setShowTicketForm(false)
             setSelectedTicket(null)
+            
+            // After creating a new ticket, navigate to all-tickets view to see it
+            if (!selectedTicket) {
+                setActiveView('all-tickets')
+            }
+            
             setRefreshTrigger((prev) => prev + 1)
         } catch (error) {
             console.error('Form submit error:', error)
@@ -118,7 +124,7 @@ export default function App() {
                     <ExternalTicketForm
                         ticket={null}
                         onSubmit={handleFormSubmit}
-                        onCancel={() => setActiveView('dashboard')}
+                        onCancel={() => setActiveView('all-tickets')}
                         externalTicketService={externalTicketService}
                     />
                 </div>
