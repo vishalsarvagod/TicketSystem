@@ -63,9 +63,13 @@ export default function App() {
             // After creating a new ticket, navigate to all-tickets view to see it
             if (!selectedTicket) {
                 setActiveView('all-tickets')
+                // Give a small delay for the backend to process, then refresh
+                setTimeout(() => {
+                    setRefreshTrigger((prev) => prev + 1)
+                }, 500)
+            } else {
+                setRefreshTrigger((prev) => prev + 1)
             }
-            
-            setRefreshTrigger((prev) => prev + 1)
         } catch (error) {
             console.error('Form submit error:', error)
             throw error

@@ -32,11 +32,31 @@ export default function TicketListView({
         try {
             setLoading(true)
             setError(null)
-            const data = await externalTicketService.listTickets()
-            setTickets(data)
+            
+            // Load both tickets and ServiceNow mappings
+            const [ticketsData, mappingsData] = await Promise.all([
+                externalTicketService.listTickets(),
+                externalTicketService.getMappings().catch(() => []) // Don't fail if mappings fail
+            ])
+            
+            // Combine tickets with ServiceNow mapping information
+            const ticketsWithServiceNow = ticketsData.map(ticket => {
+                const mapping = mappingsData.find(m => m.localTicketId === ticket.id || m.localTicketId === ticket.number)
+                if (mapping) {
+                    return {
+                        ...ticket,
+                        serviceNowNumber: mapping.serviceNowNumber,
+                        serviceNowSysId: mapping.serviceNowSysId,
+                        syncStatus: mapping.syncStatus
+                    }
+                }
+                return ticket
+            })
+            
+            setTickets(ticketsWithServiceNow)
 
             // Extract unique categories
-            const uniqueCategories = [...new Set(data.map((t) => t.category).filter(Boolean))]
+            const uniqueCategories = [...new Set(ticketsWithServiceNow.map((t) => t.category).filter(Boolean))]
             setCategories(uniqueCategories)
         } catch (err) {
             setError('Failed to load tickets: ' + err.message)
