@@ -79,9 +79,6 @@ export default function Dashboard({ externalTicketService }) {
         <div className="dashboard">
             <div className="dashboard-header">
                 <h1>Dashboard Overview</h1>
-                <button className="refresh-button" onClick={loadStats} aria-label="Refresh statistics">
-                    🔄 Refresh
-                </button>
             </div>
 
             {/* Statistics Cards */}

@@ -33,17 +33,21 @@ export default function TicketListView({
             setLoading(true)
             setError(null)
             
-            // Load both tickets and ServiceNow mappings
+            // Load both local tickets and ServiceNow mappings
             const [ticketsData, mappingsResponse] = await Promise.all([
-                externalTicketService.listTickets(),
-                externalTicketService.getMappings().catch(() => []) // Don't fail if mappings fail
+                externalTicketService.listTickets().catch(() => []),
+                externalTicketService.getMappings().catch(() => [])
             ])
             
-            // Ensure mappingsData is always an array
+            // Ensure data is always arrays
+            const localTickets = Array.isArray(ticketsData) ? ticketsData : []
             const mappingsData = Array.isArray(mappingsResponse) ? mappingsResponse : []
             
-            // Combine tickets with ServiceNow mapping information
-            const ticketsWithServiceNow = ticketsData.map(ticket => {
+            // Create a map of local ticket IDs for quick lookup
+            const localTicketIds = new Set(localTickets.map(t => t.id || t.number))
+            
+            // Combine local tickets with ServiceNow mapping information
+            const ticketsWithServiceNow = localTickets.map(ticket => {
                 const mapping = mappingsData.find(m => m.localTicketId === ticket.id || m.localTicketId === ticket.number)
                 if (mapping) {
                     return {
@@ -56,10 +60,34 @@ export default function TicketListView({
                 return ticket
             })
             
-            setTickets(ticketsWithServiceNow)
+            // Add tickets from mappings that don't exist in local tickets (ServiceNow-only tickets)
+            const serviceNowOnlyTickets = mappingsData
+                .filter(m => !localTicketIds.has(m.localTicketId))
+                .map(mapping => ({
+                    id: mapping.localTicketId,
+                    number: mapping.serviceNowNumber, // Use ServiceNow number as the ticket number
+                    title: mapping.title || 'ServiceNow Ticket',
+                    description: mapping.description || '',
+                    status: mapping.status || 'New',
+                    priority: mapping.priority || 'Medium',
+                    category: mapping.category || 'General',
+                    assignee: mapping.assignee || '',
+                    reporter: mapping.reporter || '',
+                    createdDate: mapping.createdDate,
+                    updatedDate: mapping.updatedDate,
+                    serviceNowNumber: mapping.serviceNowNumber,
+                    serviceNowSysId: mapping.serviceNowSysId,
+                    syncStatus: mapping.syncStatus,
+                    isServiceNowTicket: true
+                }))
+            
+            // Combine all tickets
+            const allTickets = [...ticketsWithServiceNow, ...serviceNowOnlyTickets]
+            
+            setTickets(allTickets)
 
             // Extract unique categories
-            const uniqueCategories = [...new Set(ticketsWithServiceNow.map((t) => t.category).filter(Boolean))]
+            const uniqueCategories = [...new Set(allTickets.map((t) => t.category).filter(Boolean))]
             setCategories(uniqueCategories)
         } catch (err) {
             setError('Failed to load tickets: ' + err.message)

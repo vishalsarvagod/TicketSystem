@@ -1,14 +1,16 @@
 .ticket-list-view {
-    padding: 0 20px 20px 20px;
-    max-width: 1600px;
-    margin: 0 auto;
+    padding: 0;
+    max-width: 100%;
 }
 
 .ticket-list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    background: white;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .header-title {
@@ -55,10 +57,11 @@
 /* Filters */
 .filters-container {
     background: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 25px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 0;
+    padding: 15px 20px;
+    margin-bottom: 0;
+    box-shadow: none;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .filters-row {
@@ -115,6 +118,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 20px;
+    padding: 20px;
 }
 
 .no-tickets {

@@ -66,14 +66,21 @@ export default function TicketCard({ ticket, onViewDetails, onEdit, onSync, onDe
             </div>
 
             <div className="ticket-card-body">
-                <div className="ticket-number">Ticket #: {ticket.number || ticket.id}</div>
-                {ticket.serviceNowNumber && (
-                    <div className="servicenow-ticket-number">
-                        ServiceNow Ticket #: <span className="snow-number">{ticket.serviceNowNumber}</span>
+                {/* Show ServiceNow number prominently if available */}
+                {ticket.serviceNowNumber ? (
+                    <div className="ticket-number servicenow-primary">
+                        🎫 {ticket.serviceNowNumber}
                     </div>
+                ) : (
+                    <div className="ticket-number">Ticket #: {ticket.number || ticket.id}</div>
+                )}
+                
+                {/* Show local ticket ID as secondary info if ServiceNow number exists */}
+                {ticket.serviceNowNumber && ticket.id && !ticket.isServiceNowTicket && (
+                    <div className="local-ticket-id">Local ID: {ticket.id}</div>
                 )}
 
-                <div className="ticket-title">{ticket.title || 'Untitled'}</div>
+                <div className="ticket-title">{ticket.title || ticket.description || 'Untitled'}</div>
 
                 <div className="ticket-details">
                     <div className="detail-row">

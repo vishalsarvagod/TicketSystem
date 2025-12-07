@@ -106,6 +106,24 @@
     margin-bottom: 4px;
 }
 
+.ticket-number.servicenow-primary {
+    font-size: 16px;
+    color: #1976d2;
+    font-weight: 700;
+    margin-bottom: 4px;
+    padding: 6px 10px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-radius: 6px;
+    border-left: 4px solid #1976d2;
+    display: inline-block;
+}
+
+.local-ticket-id {
+    font-size: 11px;
+    color: #95a5a6;
+    margin-bottom: 8px;
+}
+
 .servicenow-ticket-number {
     font-size: 12px;
     color: #1976d2;
