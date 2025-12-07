@@ -66,18 +66,20 @@ export default function TicketCard({ ticket, onViewDetails, onEdit, onSync, onDe
             </div>
 
             <div className="ticket-card-body">
-                {/* Show ServiceNow number prominently if available */}
+                {/* Show ServiceNow number prominently if available, otherwise show local ticket ID */}
                 {ticket.serviceNowNumber ? (
-                    <div className="ticket-number servicenow-primary">
-                        🎫 {ticket.serviceNowNumber}
-                    </div>
+                    <>
+                        <div className="ticket-number servicenow-primary">
+                            🎫 {ticket.serviceNowNumber}
+                        </div>
+                        {ticket.id && ticket.id !== ticket.serviceNowNumber && (
+                            <div className="local-ticket-id">Local: {ticket.id}</div>
+                        )}
+                    </>
                 ) : (
-                    <div className="ticket-number">Ticket #: {ticket.number || ticket.id}</div>
-                )}
-                
-                {/* Show local ticket ID as secondary info if ServiceNow number exists */}
-                {ticket.serviceNowNumber && ticket.id && !ticket.isServiceNowTicket && (
-                    <div className="local-ticket-id">Local ID: {ticket.id}</div>
+                    <div className="ticket-number">
+                        Ticket #: {ticket.number || ticket.id || 'N/A'}
+                    </div>
                 )}
 
                 <div className="ticket-title">{ticket.title || ticket.description || 'Untitled'}</div>
@@ -95,16 +97,10 @@ export default function TicketCard({ ticket, onViewDetails, onEdit, onSync, onDe
                         <span className="detail-label">Created:</span>
                         <span className="detail-value">{formatDate(ticket.createdDate)}</span>
                     </div>
-                    {ticket.serviceNowNumber && (
+                    {ticket.syncStatus && (
                         <div className="detail-row">
-                            <span className="detail-label">ServiceNow:</span>
-                            <span 
-                                className="detail-value servicenow-badge clickable" 
-                                onClick={openInServiceNow}
-                                title="Click to open in ServiceNow"
-                            >
-                                {ticket.serviceNowNumber}
-                            </span>
+                            <span className="detail-label">Sync:</span>
+                            <span className={`sync-status ${ticket.syncStatus?.toLowerCase()}`}>{ticket.syncStatus}</span>
                         </div>
                     )}
                 </div>

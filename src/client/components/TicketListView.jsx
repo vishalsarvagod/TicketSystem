@@ -39,7 +39,7 @@ export default function TicketListView({
                 externalTicketService.getMappings().catch(() => ({ mappings: [] }))
             ])
             
-            // Ensure data is always arrays
+            // Ensure local tickets is an array
             const localTickets = Array.isArray(ticketsData) ? ticketsData : []
             
             // Handle mappings response: can be { count, mappings } or just an array
@@ -50,13 +50,17 @@ export default function TicketListView({
                 mappingsData = mappingsResponse
             }
             
-            // Create a map of local ticket IDs for quick lookup
-            const localTicketIds = new Set(localTickets.map(t => t.id || t.number))
+            // Create a Set of ServiceNow sys_ids that are already linked to local tickets
+            const linkedServiceNowIds = new Set()
             
-            // Combine local tickets with ServiceNow mapping information
+            // First, enhance local tickets with ServiceNow info
             const ticketsWithServiceNow = localTickets.map(ticket => {
-                const mapping = mappingsData.find(m => m.localTicketId === ticket.id || m.localTicketId === ticket.number)
+                const mapping = mappingsData.find(m => 
+                    m.localTicketId === ticket.id || 
+                    m.localTicketId === ticket.number
+                )
                 if (mapping) {
+                    linkedServiceNowIds.add(mapping.serviceNowSysId)
                     return {
                         ...ticket,
                         serviceNowNumber: mapping.serviceNowNumber,
@@ -67,13 +71,14 @@ export default function TicketListView({
                 return ticket
             })
             
-            // Add tickets from mappings that don't exist in local tickets (ServiceNow-only tickets)
+            // Add ALL ServiceNow mappings that aren't linked to local tickets
+            // These are tickets created via "Create and Sync to ServiceNow"
             const serviceNowOnlyTickets = mappingsData
-                .filter(m => !localTicketIds.has(m.localTicketId))
+                .filter(m => !linkedServiceNowIds.has(m.serviceNowSysId))
                 .map(mapping => ({
                     id: mapping.localTicketId,
-                    number: mapping.serviceNowNumber, // Use ServiceNow number as the ticket number
-                    title: mapping.title || 'ServiceNow Ticket',
+                    number: mapping.serviceNowNumber,
+                    title: mapping.title || mapping.description || 'ServiceNow Ticket',
                     description: mapping.description || '',
                     status: mapping.status || 'New',
                     priority: mapping.priority || 'Medium',
@@ -88,8 +93,15 @@ export default function TicketListView({
                     isServiceNowTicket: true
                 }))
             
-            // Combine all tickets
+            // Combine all tickets - local tickets first, then ServiceNow-only tickets
             const allTickets = [...ticketsWithServiceNow, ...serviceNowOnlyTickets]
+            
+            console.log('Loaded tickets:', {
+                localTickets: localTickets.length,
+                mappings: mappingsData.length,
+                serviceNowOnly: serviceNowOnlyTickets.length,
+                total: allTickets.length
+            })
             
             setTickets(allTickets)
 

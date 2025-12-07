@@ -196,6 +196,29 @@
     transform: scale(1.05);
 }
 
+/* Sync Status */
+.sync-status {
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sync-status.synced {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.sync-status.pending {
+    background: #fff8e1;
+    color: #f9a825;
+}
+
+.sync-status.error {
+    background: #ffebee;
+    color: #c62828;
+}
+
 .ticket-tags {
     display: flex;
     flex-wrap: wrap;
