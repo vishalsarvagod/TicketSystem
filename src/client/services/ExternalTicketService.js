@@ -26,7 +26,15 @@ export class ExternalTicketService {
                 throw new Error(errorData.message || `HTTP error ${response.status}`)
             }
 
-            return await response.json()
+            // Handle empty responses (common for DELETE operations)
+            const contentType = response.headers.get('content-type')
+            if (contentType && contentType.includes('application/json')) {
+                const text = await response.text()
+                return text ? JSON.parse(text) : {}
+            } else {
+                // For non-JSON responses or empty responses, return success indicator
+                return { success: true }
+            }
         } catch (error) {
             console.error(`API Error [${endpoint}]:`, error)
             throw error
@@ -206,6 +214,44 @@ export class ExternalTicketService {
      */
     async getFieldReference() {
         return await this.fetchAPI('/api/servicenow/reference/fields')
+    }
+
+    /**
+     * Sync local ticket with ServiceNow
+     * @param {string} localTicketId - Local ticket ID
+     * @returns {Promise<Object>} Sync result with mapping data
+     */
+    async syncTicketToServiceNow(localTicketId) {
+        return await this.fetchAPI(`/api/servicenow/sync/${localTicketId}`, {
+            method: 'POST',
+        })
+    }
+
+    /**
+     * Handle ServiceNow webhook updates
+     * @param {Object} webhookData - Webhook payload from ServiceNow
+     * @returns {Promise<Object>} Processing result
+     */
+    async handleServiceNowWebhook(webhookData) {
+        return await this.fetchAPI('/api/servicenow/webhook', {
+            method: 'POST',
+            body: JSON.stringify(webhookData),
+        })
+    }
+
+    /**
+     * List ServiceNow incidents with query filter
+     * @param {string} query - Query filter for incidents
+     * @returns {Promise<Array>} Filtered incidents
+     */
+    async listServiceNowIncidentsWithQuery(query) {
+        const params = new URLSearchParams()
+        if (query) params.append('query', query)
+        
+        const queryString = params.toString()
+        const endpoint = `/api/servicenow/incidents${queryString ? '?' + queryString : ''}`
+        
+        return await this.fetchAPI(endpoint)
     }
 
     // ==================== UTILITY ====================

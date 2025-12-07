@@ -1,7 +1,8 @@
 import React from 'react'
+import HealthStatus from './HealthStatus'
 import './Sidebar.css'
 
-export default function Sidebar({ activeView, onViewChange, isCollapsed, onToggle }) {
+export default function Sidebar({ activeView, onViewChange, isCollapsed, onToggle, externalTicketService }) {
     const menuItems = [
         { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
         { id: 'all-tickets', label: 'All Tickets', icon: '📋' },
@@ -38,6 +39,12 @@ export default function Sidebar({ activeView, onViewChange, isCollapsed, onToggl
                     ))}
                 </ul>
             </nav>
+
+            {/* Health Status Indicator */}
+            <HealthStatus 
+                externalTicketService={externalTicketService}
+                isCollapsed={isCollapsed}
+            />
         </aside>
     )
 }

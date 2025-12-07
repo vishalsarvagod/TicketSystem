@@ -5,6 +5,8 @@ import Dashboard from './components/Dashboard'
 import TicketListView from './components/TicketListView'
 import TicketDetail from './components/TicketDetail'
 import ExternalTicketForm from './components/ExternalTicketForm'
+import FloatingHealthButton from './components/FloatingHealthButton'
+import ServiceNowSync from './components/ServiceNowSync'
 import './app.css'
 
 export default function App() {
@@ -41,12 +43,19 @@ export default function App() {
         setShowTicketForm(true)
     }
 
-    const handleFormSubmit = async (formData) => {
+    const handleFormSubmit = async (formData, serviceNowResult = null) => {
         try {
             if (selectedTicket) {
                 await externalTicketService.updateTicket(selectedTicket.id, formData)
             } else {
-                await externalTicketService.createTicket(formData)
+                if (serviceNowResult) {
+                    // If ServiceNow result exists, we already created the ticket through ServiceNow integration
+                    // The ticket creation and ServiceNow sync happened in one API call
+                    console.log('Ticket created with ServiceNow integration:', serviceNowResult)
+                } else {
+                    // Regular ticket creation without ServiceNow integration
+                    await externalTicketService.createTicket(formData)
+                }
             }
             setShowTicketForm(false)
             setSelectedTicket(null)
@@ -75,12 +84,23 @@ export default function App() {
     }
 
     const handleDelete = async (ticket) => {
-        if (confirm('Are you sure you want to delete this ticket?')) {
+        const confirmMessage = `Are you sure you want to delete this ticket?\n\nTicket: ${ticket.title || 'Untitled'}\nID: ${ticket.number || ticket.id}\n\nThis action cannot be undone.`
+        
+        if (confirm(confirmMessage)) {
             try {
                 await externalTicketService.deleteTicket(ticket.id)
+                
+                // Close any open modals/details
                 setShowTicketDetail(false)
+                setSelectedTicket(null)
+                
+                // Immediate refresh
                 setRefreshTrigger((prev) => prev + 1)
+                
+                // Success notification
+                alert(`Ticket "${ticket.title || ticket.number || ticket.id}" has been deleted successfully.`)
             } catch (error) {
+                console.error('Delete error:', error)
                 alert('Failed to delete ticket: ' + error.message)
             }
         }
@@ -149,12 +169,7 @@ export default function App() {
                 )
 
             case 'sync-status':
-                return (
-                    <div className="placeholder-view">
-                        <h2>🔄 Sync Status</h2>
-                        <p>View synchronization status with ServiceNow</p>
-                    </div>
-                )
+                return <ServiceNowSync />
 
             case 'settings':
                 return (
@@ -176,6 +191,7 @@ export default function App() {
                 onViewChange={handleViewChange}
                 isCollapsed={sidebarCollapsed}
                 onToggle={handleSidebarToggle}
+                externalTicketService={externalTicketService}
             />
 
             <main className={`main-content ${sidebarCollapsed ? 'sidebar-collapsed' : ''}`}>
@@ -204,6 +220,9 @@ export default function App() {
                     externalTicketService={externalTicketService}
                 />
             )}
+
+            {/* Floating Health Status Button */}
+            <FloatingHealthButton externalTicketService={externalTicketService} />
         </div>
     )
 }

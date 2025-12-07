@@ -67,6 +67,11 @@ export default function TicketCard({ ticket, onViewDetails, onEdit, onSync, onDe
 
             <div className="ticket-card-body">
                 <div className="ticket-number">Ticket #: {ticket.number || ticket.id}</div>
+                {ticket.serviceNowNumber && (
+                    <div className="servicenow-ticket-number">
+                        ServiceNow Ticket #: <span className="snow-number">{ticket.serviceNowNumber}</span>
+                    </div>
+                )}
 
                 <div className="ticket-title">{ticket.title || 'Untitled'}</div>
 

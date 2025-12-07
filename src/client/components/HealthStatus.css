@@ -1,0 +1,160 @@
+.health-status {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e9ecef;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.health-status:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.health-indicator {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.health-indicator:hover {
+    transform: scale(1.02);
+}
+
+.health-icon {
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+}
+
+.health-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.health-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.health-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: #6c757d;
+}
+
+.health-version {
+    background: #f8f9fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.health-timestamp {
+    font-size: 10px;
+}
+
+.last-checked {
+    font-size: 10px;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+.health-error {
+    font-size: 11px;
+    color: #dc3545;
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.health-refresh {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    opacity: 0.7;
+}
+
+.health-refresh:hover {
+    opacity: 1;
+    background: rgba(0, 0, 0, 0.05);
+    transform: rotate(180deg);
+}
+
+.health-refresh:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Status-based styling */
+.status-healthy {
+    border-left: 4px solid #28a745;
+}
+
+.status-healthy .health-icon {
+    color: #28a745;
+}
+
+.status-error {
+    border-left: 4px solid #dc3545;
+}
+
+.status-error .health-icon {
+    color: #dc3545;
+}
+
+.status-checking {
+    border-left: 4px solid #007bff;
+}
+
+.status-checking .health-icon {
+    color: #007bff;
+    animation: spin 1s linear infinite;
+}
+
+.status-unknown {
+    border-left: 4px solid #6c757d;
+}
+
+.status-unknown .health-icon {
+    color: #6c757d;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Collapsed sidebar styling */
+.sidebar.collapsed .health-status {
+    left: 10px;
+    right: 10px;
+    padding: 8px;
+    text-align: center;
+}
+
+.sidebar.collapsed .health-indicator {
+    justify-content: center;
+}
+
+.sidebar.collapsed .health-refresh {
+    display: none;
+}
