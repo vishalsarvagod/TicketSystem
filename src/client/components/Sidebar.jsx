@@ -6,6 +6,7 @@ export default function Sidebar({ activeView, onViewChange, isCollapsed, onToggl
     const menuItems = [
         { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
         { id: 'all-tickets', label: 'All Tickets', icon: '📋' },
+        { id: 'servicenow-tickets', label: 'ServiceNow Tickets', icon: '🎫' },
         { id: 'my-tickets', label: 'My Tickets', icon: '👤' },
         { id: 'high-priority', label: 'High Priority', icon: '⚠️' },
         { id: 'create-ticket', label: 'Create Ticket', icon: '➕' },

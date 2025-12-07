@@ -36,12 +36,19 @@ export default function TicketListView({
             // Load both local tickets and ServiceNow mappings
             const [ticketsData, mappingsResponse] = await Promise.all([
                 externalTicketService.listTickets().catch(() => []),
-                externalTicketService.getMappings().catch(() => [])
+                externalTicketService.getMappings().catch(() => ({ mappings: [] }))
             ])
             
             // Ensure data is always arrays
             const localTickets = Array.isArray(ticketsData) ? ticketsData : []
-            const mappingsData = Array.isArray(mappingsResponse) ? mappingsResponse : []
+            
+            // Handle mappings response: can be { count, mappings } or just an array
+            let mappingsData = []
+            if (mappingsResponse && mappingsResponse.mappings && Array.isArray(mappingsResponse.mappings)) {
+                mappingsData = mappingsResponse.mappings
+            } else if (Array.isArray(mappingsResponse)) {
+                mappingsData = mappingsResponse
+            }
             
             // Create a map of local ticket IDs for quick lookup
             const localTicketIds = new Set(localTickets.map(t => t.id || t.number))

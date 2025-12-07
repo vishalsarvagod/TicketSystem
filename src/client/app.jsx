@@ -7,6 +7,7 @@ import TicketDetail from './components/TicketDetail'
 import ExternalTicketForm from './components/ExternalTicketForm'
 import FloatingHealthButton from './components/FloatingHealthButton'
 import ServiceNowSync from './components/ServiceNowSync'
+import ServiceNowTickets from './components/ServiceNowTickets'
 import './app.css'
 
 export default function App() {
@@ -175,6 +176,14 @@ export default function App() {
                         onSync={handleSync}
                         onDelete={handleDelete}
                         filterType="high-priority"
+                    />
+                )
+
+            case 'servicenow-tickets':
+                return (
+                    <ServiceNowTickets
+                        key={`snow-${refreshTrigger}`}
+                        externalTicketService={externalTicketService}
                     />
                 )
 

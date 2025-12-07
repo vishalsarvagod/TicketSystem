@@ -1,0 +1,269 @@
+.servicenow-tickets {
+    background: white;
+    min-height: 100vh;
+}
+
+.servicenow-tickets-header {
+    padding: 15px 20px;
+    background: white;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.servicenow-tickets-header .header-title {
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+}
+
+.servicenow-tickets-header h1 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.servicenow-tickets-header .ticket-count {
+    font-size: 14px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.servicenow-tickets-loading,
+.servicenow-tickets-error {
+    padding: 60px 20px;
+    text-align: center;
+    color: #6c757d;
+}
+
+.servicenow-tickets-error {
+    color: #e74c3c;
+}
+
+.servicenow-tickets-error button {
+    margin-top: 15px;
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+/* Filters */
+.servicenow-tickets .filters-container {
+    background: white;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.servicenow-tickets .filters-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.servicenow-tickets .filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.servicenow-tickets .filter-group label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 4px;
+}
+
+.servicenow-tickets .filter-group select {
+    padding: 8px 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.servicenow-tickets .filter-group select:focus {
+    outline: none;
+    border-color: #3498db;
+}
+
+/* Table */
+.tickets-table-container {
+    overflow-x: auto;
+    padding: 0;
+}
+
+.tickets-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tickets-table th {
+    background: #f8f9fa;
+    padding: 12px 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 13px;
+    color: #495057;
+    border-bottom: 2px solid #dee2e6;
+    white-space: nowrap;
+}
+
+.tickets-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e9ecef;
+    font-size: 14px;
+    color: #2c3e50;
+}
+
+.tickets-table tbody tr:hover {
+    background: #f8f9fa;
+}
+
+/* Incident Number Badge */
+.incident-number .snow-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+}
+
+.description-cell {
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.date-cell {
+    white-space: nowrap;
+    font-size: 13px;
+    color: #6c757d;
+}
+
+/* Status Badges */
+.status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-new {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.status-in-progress {
+    background: #fff3e0;
+    color: #f57c00;
+}
+
+.status-resolved {
+    background: #e8f5e9;
+    color: #388e3c;
+}
+
+.status-closed {
+    background: #eceff1;
+    color: #546e7a;
+}
+
+.status-default {
+    background: #f5f5f5;
+    color: #757575;
+}
+
+/* Priority Badges */
+.priority-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.priority-critical {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.priority-high {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.priority-medium {
+    background: #fff8e1;
+    color: #f9a825;
+}
+
+.priority-low {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.priority-default {
+    background: #f5f5f5;
+    color: #757575;
+}
+
+/* Sync Status Badges */
+.sync-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sync-synced {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.sync-pending {
+    background: #fff8e1;
+    color: #f9a825;
+}
+
+.sync-error {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.sync-default {
+    background: #f5f5f5;
+    color: #757575;
+}
+
+/* No tickets message */
+.no-tickets {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.no-tickets p {
+    font-size: 18px;
+    color: #6c757d;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .servicenow-tickets .filters-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .tickets-table th,
+    .tickets-table td {
+        padding: 10px 12px;
+    }
+    
+    .description-cell {
+        max-width: 150px;
+    }
+}
