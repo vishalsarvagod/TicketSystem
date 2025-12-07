@@ -34,10 +34,13 @@ export default function TicketListView({
             setError(null)
             
             // Load both tickets and ServiceNow mappings
-            const [ticketsData, mappingsData] = await Promise.all([
+            const [ticketsData, mappingsResponse] = await Promise.all([
                 externalTicketService.listTickets(),
                 externalTicketService.getMappings().catch(() => []) // Don't fail if mappings fail
             ])
+            
+            // Ensure mappingsData is always an array
+            const mappingsData = Array.isArray(mappingsResponse) ? mappingsResponse : []
             
             // Combine tickets with ServiceNow mapping information
             const ticketsWithServiceNow = ticketsData.map(ticket => {
