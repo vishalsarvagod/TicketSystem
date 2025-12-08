@@ -262,6 +262,7 @@ export default function ServiceNowTickets({ externalTicketService }) {
                                 <th>Status</th>
                                 <th>Priority</th>
                                 <th>Category</th>
+                                <th>Casset</th>
                                 <th>Sync Status</th>
                                 <th>Created</th>
                             </tr>
@@ -286,6 +287,17 @@ export default function ServiceNowTickets({ externalTicketService }) {
                                         </span>
                                     </td>
                                     <td>{mapping.category || 'N/A'}</td>
+                                    <td className="casset-cell">
+                                        {mapping.cassetName && (
+                                            <span className="casset-badge casset-name">{mapping.cassetName}</span>
+                                        )}
+                                        {mapping.cassetStatus && (
+                                            <span className={`casset-badge casset-status-${mapping.cassetStatus.toLowerCase()}`}>
+                                                {mapping.cassetStatus}
+                                            </span>
+                                        )}
+                                        {!mapping.cassetName && !mapping.cassetStatus && 'N/A'}
+                                    </td>
                                     <td>
                                         <span className={`sync-badge ${getSyncStatusClass(mapping.syncStatus)}`}>
                                             {mapping.syncStatus || 'Unknown'}

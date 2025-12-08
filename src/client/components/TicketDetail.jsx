@@ -219,6 +219,24 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                         <td className="value">{formatDate(ticket.resolvedDate)}</td>
                                     </tr>
                                 )}
+                                {ticket.cassetName && (
+                                    <tr>
+                                        <td className="label">Casset Name</td>
+                                        <td className="value">
+                                            <span className="casset-badge casset-name">{ticket.cassetName}</span>
+                                        </td>
+                                    </tr>
+                                )}
+                                {ticket.cassetStatus && (
+                                    <tr>
+                                        <td className="label">Casset Status</td>
+                                        <td className="value">
+                                            <span className={`casset-badge casset-status-${ticket.cassetStatus.toLowerCase()}`}>
+                                                {ticket.cassetStatus}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                )}
                                 {ticket.tags && ticket.tags.length > 0 && (
                                     <tr>
                                         <td className="label">Tags</td>

@@ -292,6 +292,36 @@
     color: #757575;
 }
 
+/* Casset Badges */
+.casset-cell {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.casset-badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.casset-badge.casset-name {
+    background: #fff3e0;
+    color: #e65100;
+}
+
+.casset-badge.casset-status-ok {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.casset-badge.casset-status-full {
+    background: #ffebee;
+    color: #c62828;
+}
+
 /* No tickets message */
 .no-tickets {
     padding: 60px 20px;

@@ -14,6 +14,8 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
         reporter: ticket?.reporter || 'Current User',
         assignmentGroup: ticket?.assignmentGroup || '',
         tags: ticket?.tags?.join(', ') || '',
+        cassetName: ticket?.cassetName || '',
+        cassetStatus: ticket?.cassetStatus || '',
     })
 
     const [createInServiceNow, setCreateInServiceNow] = useState(false)
@@ -89,6 +91,8 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
             reporter: 'Current User',
             assignmentGroup: '',
             tags: '',
+            cassetName: '',
+            cassetStatus: '',
         })
     }
 
@@ -230,6 +234,29 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
                                 placeholder="Enter tags separated by commas (e.g., urgent, network, vpn)"
                             />
                             <small>Separate multiple tags with commas</small>
+                        </div>
+
+                        {/* Casset Name and Casset Status */}
+                        <div className="form-row">
+                            <div className="form-group">
+                                <label htmlFor="cassetName">Casset Name</label>
+                                <select id="cassetName" name="cassetName" value={formData.cassetName} onChange={handleChange}>
+                                    <option value="">-- Select Casset Name --</option>
+                                    <option value="Cashout">Cashout</option>
+                                    <option value="Cash_Deposit">Cash Deposit</option>
+                                </select>
+                                <small>Optional - Select casset type</small>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="cassetStatus">Casset Status</label>
+                                <select id="cassetStatus" name="cassetStatus" value={formData.cassetStatus} onChange={handleChange}>
+                                    <option value="">-- Select Casset Status --</option>
+                                    <option value="Ok">Ok</option>
+                                    <option value="Full">Full</option>
+                                </select>
+                                <small>Optional - Select casset status</small>
+                            </div>
                         </div>
 
                         {/* ServiceNow Integration Option (only for new tickets) */}

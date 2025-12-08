@@ -103,6 +103,16 @@ export default function TicketCard({ ticket, onViewDetails, onEdit, onSync, onDe
                             <span className={`sync-status ${ticket.syncStatus?.toLowerCase()}`}>{ticket.syncStatus}</span>
                         </div>
                     )}
+                    {(ticket.cassetName || ticket.cassetStatus) && (
+                        <div className="detail-row casset-row">
+                            {ticket.cassetName && (
+                                <span className="casset-badge casset-name">{ticket.cassetName}</span>
+                            )}
+                            {ticket.cassetStatus && (
+                                <span className={`casset-badge casset-status-${ticket.cassetStatus.toLowerCase()}`}>{ticket.cassetStatus}</span>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {ticket.tags && ticket.tags.length > 0 && (
