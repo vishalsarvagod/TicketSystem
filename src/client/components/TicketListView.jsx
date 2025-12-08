@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import TicketCard from './TicketCard'
 import './TicketListView.css'
+
+// Auto-refresh interval in milliseconds (30 seconds)
+const AUTO_REFRESH_INTERVAL = 30000
 
 export default function TicketListView({
     externalTicketService,
@@ -13,6 +16,8 @@ export default function TicketListView({
     const [tickets, setTickets] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
+    const [lastUpdated, setLastUpdated] = useState(null)
+    const [isAutoRefreshing, setIsAutoRefreshing] = useState(false)
 
     // Filter states
     const [statusFilter, setStatusFilter] = useState('All')
@@ -23,14 +28,32 @@ export default function TicketListView({
 
     // Unique values for filters
     const [categories, setCategories] = useState([])
+    
+    // Ref for interval cleanup
+    const refreshIntervalRef = useRef(null)
 
     useEffect(() => {
         loadTickets()
+        
+        // Set up auto-refresh polling to pick up webhook updates
+        refreshIntervalRef.current = setInterval(() => {
+            loadTickets(true) // silent refresh
+        }, AUTO_REFRESH_INTERVAL)
+        
+        // Cleanup interval on unmount
+        return () => {
+            if (refreshIntervalRef.current) {
+                clearInterval(refreshIntervalRef.current)
+            }
+        }
     }, [])
 
-    const loadTickets = async () => {
+    const loadTickets = async (silent = false) => {
         try {
-            setLoading(true)
+            if (!silent) {
+                setLoading(true)
+            }
+            setIsAutoRefreshing(silent)
             setError(null)
             
             // Load both local tickets and ServiceNow mappings
@@ -100,19 +123,24 @@ export default function TicketListView({
                 localTickets: localTickets.length,
                 mappings: mappingsData.length,
                 serviceNowOnly: serviceNowOnlyTickets.length,
-                total: allTickets.length
+                total: allTickets.length,
+                autoRefresh: silent
             })
             
             setTickets(allTickets)
+            setLastUpdated(new Date())
 
             // Extract unique categories
             const uniqueCategories = [...new Set(allTickets.map((t) => t.category).filter(Boolean))]
             setCategories(uniqueCategories)
         } catch (err) {
-            setError('Failed to load tickets: ' + err.message)
+            if (!silent) {
+                setError('Failed to load tickets: ' + err.message)
+            }
             console.error(err)
         } finally {
             setLoading(false)
+            setIsAutoRefreshing(false)
         }
     }
 
@@ -212,6 +240,24 @@ export default function TicketListView({
                     <span className="ticket-count">
                         {filteredTickets.length} {filteredTickets.length === 1 ? 'ticket' : 'tickets'}
                     </span>
+                </div>
+                <div className="header-actions">
+                    {isAutoRefreshing && (
+                        <span className="auto-refresh-indicator">🔄 Syncing...</span>
+                    )}
+                    {lastUpdated && !isAutoRefreshing && (
+                        <span className="last-updated">
+                            Updated: {lastUpdated.toLocaleTimeString()}
+                        </span>
+                    )}
+                    <button 
+                        className="refresh-btn" 
+                        onClick={() => loadTickets(false)}
+                        disabled={loading || isAutoRefreshing}
+                        title="Refresh tickets (auto-refreshes every 30s)"
+                    >
+                        🔄 Refresh
+                    </button>
                 </div>
             </div>
 

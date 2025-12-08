@@ -1,25 +1,48 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import './ServiceNowTickets.css'
+
+// Auto-refresh interval in milliseconds (30 seconds)
+const AUTO_REFRESH_INTERVAL = 30000
 
 export default function ServiceNowTickets({ externalTicketService }) {
     const [mappings, setMappings] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
     const [count, setCount] = useState(0)
+    const [lastUpdated, setLastUpdated] = useState(null)
+    const [isAutoRefreshing, setIsAutoRefreshing] = useState(false)
 
     // Filters
     const [statusFilter, setStatusFilter] = useState('All')
     const [priorityFilter, setPriorityFilter] = useState('All')
     const [categoryFilter, setCategoryFilter] = useState('All')
     const [sortBy, setSortBy] = useState('created-desc')
+    
+    // Ref for interval cleanup
+    const refreshIntervalRef = useRef(null)
 
     useEffect(() => {
         loadMappings()
+        
+        // Set up auto-refresh polling to pick up webhook updates
+        refreshIntervalRef.current = setInterval(() => {
+            loadMappings(true) // silent refresh
+        }, AUTO_REFRESH_INTERVAL)
+        
+        // Cleanup interval on unmount
+        return () => {
+            if (refreshIntervalRef.current) {
+                clearInterval(refreshIntervalRef.current)
+            }
+        }
     }, [])
 
-    const loadMappings = async () => {
+    const loadMappings = async (silent = false) => {
         try {
-            setLoading(true)
+            if (!silent) {
+                setLoading(true)
+            }
+            setIsAutoRefreshing(silent)
             setError(null)
             const response = await externalTicketService.getMappings()
             
@@ -34,11 +57,20 @@ export default function ServiceNowTickets({ externalTicketService }) {
                 setMappings([])
                 setCount(0)
             }
+            setLastUpdated(new Date())
+            
+            console.log('ServiceNow tickets loaded:', {
+                count: response?.count || response?.length || 0,
+                autoRefresh: silent
+            })
         } catch (err) {
-            setError('Failed to load ServiceNow tickets: ' + err.message)
+            if (!silent) {
+                setError('Failed to load ServiceNow tickets: ' + err.message)
+            }
             console.error(err)
         } finally {
             setLoading(false)
+            setIsAutoRefreshing(false)
         }
     }
 
@@ -136,7 +168,7 @@ export default function ServiceNowTickets({ externalTicketService }) {
         return (
             <div className="servicenow-tickets-error">
                 <p>{error}</p>
-                <button onClick={loadMappings}>Retry</button>
+                <button onClick={() => loadMappings(false)}>Retry</button>
             </div>
         )
     }
@@ -147,6 +179,24 @@ export default function ServiceNowTickets({ externalTicketService }) {
                 <div className="header-title">
                     <h1>🎫 ServiceNow Tickets</h1>
                     <span className="ticket-count">{filteredMappings.length} of {count} tickets</span>
+                </div>
+                <div className="header-actions">
+                    {isAutoRefreshing && (
+                        <span className="auto-refresh-indicator">🔄 Syncing...</span>
+                    )}
+                    {lastUpdated && !isAutoRefreshing && (
+                        <span className="last-updated">
+                            Updated: {lastUpdated.toLocaleTimeString()}
+                        </span>
+                    )}
+                    <button 
+                        className="refresh-btn" 
+                        onClick={() => loadMappings(false)}
+                        disabled={loading || isAutoRefreshing}
+                        title="Refresh tickets (auto-refreshes every 30s)"
+                    >
+                        🔄 Refresh
+                    </button>
                 </div>
             </div>
 
