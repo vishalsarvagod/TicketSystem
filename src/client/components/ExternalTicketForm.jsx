@@ -242,8 +242,9 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
                                 <label htmlFor="cassetName">Casset Name</label>
                                 <select id="cassetName" name="cassetName" value={formData.cassetName} onChange={handleChange}>
                                     <option value="">-- Select Casset Name --</option>
-                                    <option value="Cashout">Cashout</option>
-                                    <option value="Cash_Deposit">Cash Deposit</option>
+                                    <option value="1">Cashout</option>
+                                    <option value="2">Cash_Deposit</option>
+                                    <option value="3">Recycle</option>
                                 </select>
                                 <small>Optional - Select casset type</small>
                             </div>
