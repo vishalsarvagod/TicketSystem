@@ -9,6 +9,7 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
         description: ticket?.description || '',
         priority: ticket?.priority || 'Medium',
         category: ticket?.category || 'Software',
+        subcategory: ticket?.subcategory || '',
         impact: ticket?.impact || '2-Medium',
         urgency: ticket?.urgency || '2-Medium',
         reporter: ticket?.reporter || 'Current User',
@@ -86,6 +87,7 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
             description: '',
             priority: 'Medium',
             category: 'Software',
+            subcategory: '',
             impact: '2-Medium',
             urgency: '2-Medium',
             reporter: 'Current User',
@@ -172,6 +174,19 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
+                        </div>
+
+                        {/* Subcategory */}
+                        <div className="form-group">
+                            <label htmlFor="subcategory">Subcategory</label>
+                            <input
+                                type="text"
+                                id="subcategory"
+                                name="subcategory"
+                                value={formData.subcategory}
+                                onChange={handleChange}
+                                placeholder="Enter subcategory (optional)"
+                            />
                         </div>
 
                         {/* Impact and Urgency */}

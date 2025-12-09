@@ -179,6 +179,12 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                     <td className="label">Category</td>
                                     <td className="value">{ticket.category || 'N/A'}</td>
                                 </tr>
+                                {ticket.subcategory && (
+                                    <tr>
+                                        <td className="label">Subcategory</td>
+                                        <td className="value">{ticket.subcategory}</td>
+                                    </tr>
+                                )}
                                 <tr>
                                     <td className="label">Assignee</td>
                                     <td className="value">{ticket.assignee || 'Unassigned'}</td>
@@ -187,6 +193,12 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                     <td className="label">Reporter</td>
                                     <td className="value">{ticket.reporter || 'N/A'}</td>
                                 </tr>
+                                {ticket.updatedBy && (
+                                    <tr>
+                                        <td className="label">Updated By</td>
+                                        <td className="value">{ticket.updatedBy}</td>
+                                    </tr>
+                                )}
                                 <tr>
                                     <td className="label">Created Date</td>
                                     <td className="value">{formatDate(ticket.createdDate)}</td>
@@ -195,10 +207,30 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                     <td className="label">Updated Date</td>
                                     <td className="value">{formatDate(ticket.updatedDate)}</td>
                                 </tr>
-                                {ticket.resolvedDate && (
+                                {ticket.resolvedAt && (
                                     <tr>
-                                        <td className="label">Resolved Date</td>
-                                        <td className="value">{formatDate(ticket.resolvedDate)}</td>
+                                        <td className="label">Resolved At</td>
+                                        <td className="value">{formatDate(ticket.resolvedAt)}</td>
+                                    </tr>
+                                )}
+                                {ticket.closedAt && (
+                                    <tr>
+                                        <td className="label">Closed At</td>
+                                        <td className="value">{formatDate(ticket.closedAt)}</td>
+                                    </tr>
+                                )}
+                                {ticket.resolutionCode && (
+                                    <tr>
+                                        <td className="label">Resolution Code</td>
+                                        <td className="value">
+                                            <span className="resolution-badge">{ticket.resolutionCode}</span>
+                                        </td>
+                                    </tr>
+                                )}
+                                {ticket.resolutionNotes && (
+                                    <tr>
+                                        <td className="label">Resolution Notes</td>
+                                        <td className="value description">{ticket.resolutionNotes}</td>
                                     </tr>
                                 )}
                                 {ticket.cassetName && (
@@ -216,6 +248,14 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                             <span className={`casset-badge casset-status-${ticket.cassetStatus.toLowerCase()}`}>
                                                 {ticket.cassetStatus}
                                             </span>
+                                        </td>
+                                    </tr>
+                                )}
+                                {ticket.syncStatus === 'Error' && ticket.syncErrorMessage && (
+                                    <tr>
+                                        <td className="label">Sync Error</td>
+                                        <td className="value">
+                                            <span className="sync-error-message">{ticket.syncErrorMessage}</span>
                                         </td>
                                     </tr>
                                 )}
@@ -238,11 +278,31 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                         )}
                     </section>
 
-                    {/* Comments Section */}
+                    {/* ServiceNow Work Notes */}
+                    {ticket.workNotes && (
+                        <section className="worknotes-section">
+                            <h3>📋 Work Notes (ServiceNow)</h3>
+                            <div className="worknotes-content">
+                                {ticket.workNotes}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* ServiceNow Comments (Customer-visible) */}
+                    {ticket.comments && typeof ticket.comments === 'string' && (
+                        <section className="servicenow-comments-section">
+                            <h3>💬 ServiceNow Comments</h3>
+                            <div className="servicenow-comments-content">
+                                {ticket.comments}
+                            </div>
+                        </section>
+                    )}
+
+                    {/* Local Comments Section */}
                     <section className="comments-section">
-                        <h3>Comments ({ticket.comments?.length || 0})</h3>
+                        <h3>Comments {Array.isArray(ticket.comments) ? `(${ticket.comments.length})` : ''}</h3>
                         
-                        {ticket.comments && ticket.comments.length > 0 ? (
+                        {Array.isArray(ticket.comments) && ticket.comments.length > 0 ? (
                             <div className="comments-list">
                                 {ticket.comments.map((comment) => (
                                     <div key={comment.id} className="comment">
@@ -255,7 +315,9 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                 ))}
                             </div>
                         ) : (
-                            <p className="no-comments">No comments yet</p>
+                            !ticket.comments || typeof ticket.comments !== 'string' ? (
+                                <p className="no-comments">No comments yet</p>
+                            ) : null
                         )}
 
                         <form className="comment-form" onSubmit={handleAddComment}>
