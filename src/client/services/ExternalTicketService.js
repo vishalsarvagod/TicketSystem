@@ -129,6 +129,19 @@ export class ExternalTicketService {
         })
     }
 
+    /**
+     * Add comment to ServiceNow incident (syncs to ServiceNow)
+     * @param {string} sysId - ServiceNow sys_id
+     * @param {Object} commentData - Comment data {content, type: 'comments'|'work_notes', author}
+     * @returns {Promise<Object>} Response with sync status
+     */
+    async addServiceNowComment(sysId, commentData) {
+        return await this.fetchAPI(`/api/servicenow/incidents/${sysId}/comments`, {
+            method: 'POST',
+            body: JSON.stringify(commentData),
+        })
+    }
+
     // ==================== SERVICENOW INTEGRATION API ====================
 
     /**

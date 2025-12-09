@@ -3,6 +3,8 @@ import './TicketDetail.css'
 
 export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefresh, externalTicketService }) {
     const [comment, setComment] = useState('')
+    const [commentType, setCommentType] = useState('comments') // 'comments' or 'work_notes'
+    const [syncToServiceNow, setSyncToServiceNow] = useState(true) // Default to sync
     const [submittingComment, setSubmittingComment] = useState(false)
     const [infoExpanded, setInfoExpanded] = useState(false) // Collapsed by default to show comments
 
@@ -86,10 +88,26 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
 
         try {
             setSubmittingComment(true)
-            await externalTicketService.addComment(ticket.id, {
-                author: 'Current User', // Replace with actual user
-                content: comment.trim(),
-            })
+            
+            // Check if ticket is linked to ServiceNow and user wants to sync
+            const isLinkedToServiceNow = ticket.serviceNowSysId || ticket.serviceNowNumber
+            const shouldSync = isLinkedToServiceNow && syncToServiceNow
+            
+            if (shouldSync && ticket.serviceNowSysId) {
+                // Use ServiceNow comment endpoint
+                await externalTicketService.addServiceNowComment(ticket.serviceNowSysId, {
+                    content: comment.trim(),
+                    type: commentType,
+                    author: 'Current User'
+                })
+            } else {
+                // Use local comment endpoint
+                await externalTicketService.addComment(ticket.id, {
+                    author: 'Current User',
+                    content: comment.trim(),
+                })
+            }
+            
             setComment('')
             onRefresh()
         } catch (error) {
@@ -394,40 +412,97 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                         </section>
                     )}
 
-                    {/* Local Comments Section */}
+                    {/* Add Comment Section */}
                     <section className="comments-section">
-                        <h3>Comments {Array.isArray(ticket.comments) ? `(${ticket.comments.length})` : ''}</h3>
-                        
-                        {Array.isArray(ticket.comments) && ticket.comments.length > 0 ? (
-                            <div className="comments-list">
-                                {ticket.comments.map((comment) => (
-                                    <div key={comment.id} className="comment">
-                                        <div className="comment-header">
-                                            <strong>{comment.author}</strong>
-                                            <span className="comment-date">{formatDate(comment.createdDate)}</span>
-                                        </div>
-                                        <p className="comment-content">{comment.content}</p>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            !ticket.comments || typeof ticket.comments !== 'string' ? (
-                                <p className="no-comments">No comments yet</p>
-                            ) : null
-                        )}
+                        <h3>Add Comment</h3>
 
                         <form className="comment-form" onSubmit={handleAddComment}>
+                            {/* Comment Type Selector - Only show if linked to ServiceNow */}
+                            {(ticket.serviceNowSysId || ticket.serviceNowNumber) && (
+                                <div className="comment-options">
+                                    <div className="comment-type-selector">
+                                        <label>Comment Type:</label>
+                                        <div className="type-buttons">
+                                            <button
+                                                type="button"
+                                                className={`type-btn ${commentType === 'comments' ? 'active customer' : ''}`}
+                                                onClick={() => setCommentType('comments')}
+                                            >
+                                                💬 Customer Comment
+                                            </button>
+                                            <button
+                                                type="button"
+                                                className={`type-btn ${commentType === 'work_notes' ? 'active internal' : ''}`}
+                                                onClick={() => setCommentType('work_notes')}
+                                            >
+                                                📋 Work Note (Internal)
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="sync-toggle">
+                                        <label className="toggle-label">
+                                            <input
+                                                type="checkbox"
+                                                checked={syncToServiceNow}
+                                                onChange={(e) => setSyncToServiceNow(e.target.checked)}
+                                            />
+                                            <span className="toggle-text">
+                                                🔄 Sync to ServiceNow
+                                                {ticket.serviceNowNumber && (
+                                                    <span className="sn-ref">({ticket.serviceNowNumber})</span>
+                                                )}
+                                            </span>
+                                        </label>
+                                    </div>
+                                </div>
+                            )}
+
                             <textarea
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
-                                placeholder="Add a comment..."
+                                placeholder={
+                                    commentType === 'work_notes' 
+                                        ? "Add internal work note (not visible to customer)..." 
+                                        : "Add a comment..."
+                                }
                                 rows={3}
                                 disabled={submittingComment}
                             />
-                            <button type="submit" disabled={submittingComment || !comment.trim()}>
-                                {submittingComment ? 'Adding...' : 'Add Comment'}
-                            </button>
+                            
+                            <div className="comment-submit-row">
+                                <button type="submit" disabled={submittingComment || !comment.trim()}>
+                                    {submittingComment ? 'Adding...' : (
+                                        syncToServiceNow && (ticket.serviceNowSysId || ticket.serviceNowNumber)
+                                            ? `Add & Sync ${commentType === 'work_notes' ? 'Work Note' : 'Comment'}`
+                                            : 'Add Comment'
+                                    )}
+                                </button>
+                                {syncToServiceNow && (ticket.serviceNowSysId || ticket.serviceNowNumber) && (
+                                    <span className="sync-indicator">
+                                        ✓ Will sync to ServiceNow
+                                    </span>
+                                )}
+                            </div>
                         </form>
+
+                        {/* Existing Local Comments Display */}
+                        {Array.isArray(ticket.comments) && ticket.comments.length > 0 && (
+                            <>
+                                <h4 className="local-comments-title">Local Comments ({ticket.comments.length})</h4>
+                                <div className="comments-list">
+                                    {ticket.comments.map((c) => (
+                                        <div key={c.id} className="comment">
+                                            <div className="comment-header">
+                                                <strong>{c.author}</strong>
+                                                <span className="comment-date">{formatDate(c.createdDate)}</span>
+                                            </div>
+                                            <p className="comment-content">{c.content}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        )}
                     </section>
                 </div>
             </div>
