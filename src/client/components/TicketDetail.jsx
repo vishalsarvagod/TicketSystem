@@ -18,6 +18,68 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
         })
     }
 
+    // Parse ServiceNow comments/work notes into structured format
+    const parseServiceNowComments = (rawText) => {
+        if (!rawText || typeof rawText !== 'string') return []
+        
+        // Split by double newlines or the date pattern
+        const entries = rawText.split(/\n\n+/).filter(entry => entry.trim())
+        const parsed = []
+        
+        for (const entry of entries) {
+            // Match pattern: "2025-12-08 18:01:38 - Author Name (Type)\nContent"
+            const match = entry.match(/^(\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}:\d{2})\s*-\s*([^(]+)\s*\(([^)]+)\)\s*\n?([\s\S]*)$/)
+            
+            if (match) {
+                const [, timestamp, author, type, content] = match
+                parsed.push({
+                    timestamp: timestamp.trim(),
+                    author: author.trim(),
+                    type: type.trim(),
+                    content: content.trim()
+                })
+            } else if (entry.trim()) {
+                // Fallback for unmatched format
+                parsed.push({
+                    timestamp: null,
+                    author: 'ServiceNow',
+                    type: 'Note',
+                    content: entry.trim()
+                })
+            }
+        }
+        
+        return parsed
+    }
+
+    // Format timestamp for display
+    const formatCommentTime = (timestamp) => {
+        if (!timestamp) return ''
+        try {
+            const date = new Date(timestamp.replace(' ', 'T'))
+            const now = new Date()
+            const diffMs = now - date
+            const diffMins = Math.floor(diffMs / 60000)
+            const diffHours = Math.floor(diffMs / 3600000)
+            const diffDays = Math.floor(diffMs / 86400000)
+            
+            if (diffMins < 1) return 'Just now'
+            if (diffMins < 60) return `${diffMins}m ago`
+            if (diffHours < 24) return `${diffHours}h ago`
+            if (diffDays < 7) return `${diffDays}d ago`
+            
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+        } catch {
+            return timestamp
+        }
+    }
+
+    // Get initials from author name
+    const getInitials = (name) => {
+        if (!name) return '?'
+        return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    }
+
     const handleAddComment = async (e) => {
         e.preventDefault()
         if (!comment.trim()) return
@@ -278,22 +340,56 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                         )}
                     </section>
 
-                    {/* ServiceNow Work Notes */}
+                    {/* ServiceNow Work Notes - Chat Style */}
                     {ticket.workNotes && (
-                        <section className="worknotes-section">
-                            <h3>📋 Work Notes (ServiceNow)</h3>
-                            <div className="worknotes-content">
-                                {ticket.workNotes}
+                        <section className="sn-comments-section worknotes-theme">
+                            <div className="sn-comments-header">
+                                <span className="sn-comments-icon">📋</span>
+                                <h3>Work Notes</h3>
+                                <span className="sn-comments-badge internal">Internal</span>
+                            </div>
+                            <div className="sn-comments-thread">
+                                {parseServiceNowComments(ticket.workNotes).map((entry, index) => (
+                                    <div key={index} className="sn-comment-bubble">
+                                        <div className="sn-comment-avatar" title={entry.author}>
+                                            {getInitials(entry.author)}
+                                        </div>
+                                        <div className="sn-comment-body">
+                                            <div className="sn-comment-meta">
+                                                <span className="sn-comment-author">{entry.author}</span>
+                                                <span className="sn-comment-time">{formatCommentTime(entry.timestamp)}</span>
+                                            </div>
+                                            <div className="sn-comment-text">{entry.content}</div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </section>
                     )}
 
-                    {/* ServiceNow Comments (Customer-visible) */}
+                    {/* ServiceNow Comments (Customer-visible) - Chat Style */}
                     {ticket.comments && typeof ticket.comments === 'string' && (
-                        <section className="servicenow-comments-section">
-                            <h3>💬 ServiceNow Comments</h3>
-                            <div className="servicenow-comments-content">
-                                {ticket.comments}
+                        <section className="sn-comments-section comments-theme">
+                            <div className="sn-comments-header">
+                                <span className="sn-comments-icon">💬</span>
+                                <h3>Customer Comments</h3>
+                                <span className="sn-comments-badge customer">Customer Visible</span>
+                            </div>
+                            <div className="sn-comments-thread">
+                                {parseServiceNowComments(ticket.comments).map((entry, index) => (
+                                    <div key={index} className="sn-comment-bubble">
+                                        <div className="sn-comment-avatar" title={entry.author}>
+                                            {getInitials(entry.author)}
+                                        </div>
+                                        <div className="sn-comment-body">
+                                            <div className="sn-comment-meta">
+                                                <span className="sn-comment-author">{entry.author}</span>
+                                                <span className="sn-comment-time">{formatCommentTime(entry.timestamp)}</span>
+                                            </div>
+                                            <div className="sn-comment-text">{entry.content}</div>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </section>
                     )}
