@@ -88,7 +88,20 @@ export default function TicketListView({
                         ...ticket,
                         serviceNowNumber: mapping.serviceNowNumber,
                         serviceNowSysId: mapping.serviceNowSysId,
-                        syncStatus: mapping.syncStatus
+                        syncStatus: mapping.syncStatus,
+                        // Include all mapping fields for display
+                        workNotes: mapping.workNotes,
+                        comments: mapping.comments,
+                        updatedBy: mapping.updatedBy,
+                        resolutionCode: mapping.resolutionCode,
+                        resolutionNotes: mapping.resolutionNotes,
+                        resolvedAt: mapping.resolvedAt,
+                        closedAt: mapping.closedAt,
+                        lastSyncedFromServiceNow: mapping.lastSyncedFromServiceNow,
+                        lastSyncedToServiceNow: mapping.lastSyncedToServiceNow,
+                        syncErrorMessage: mapping.syncErrorMessage,
+                        cassetName: mapping.cassetName || ticket.cassetName,
+                        cassetStatus: mapping.cassetStatus || ticket.cassetStatus,
                     }
                 }
                 return ticket
@@ -106,6 +119,7 @@ export default function TicketListView({
                     status: mapping.status || 'New',
                     priority: mapping.priority || 'Medium',
                     category: mapping.category || 'General',
+                    subcategory: mapping.subcategory || '',
                     assignee: mapping.assignee || '',
                     reporter: mapping.reporter || '',
                     createdDate: mapping.createdDate,
@@ -113,7 +127,20 @@ export default function TicketListView({
                     serviceNowNumber: mapping.serviceNowNumber,
                     serviceNowSysId: mapping.serviceNowSysId,
                     syncStatus: mapping.syncStatus,
-                    isServiceNowTicket: true
+                    syncErrorMessage: mapping.syncErrorMessage,
+                    isServiceNowTicket: true,
+                    // New fields from backend
+                    workNotes: mapping.workNotes,
+                    comments: mapping.comments,
+                    updatedBy: mapping.updatedBy,
+                    resolutionCode: mapping.resolutionCode,
+                    resolutionNotes: mapping.resolutionNotes,
+                    resolvedAt: mapping.resolvedAt,
+                    closedAt: mapping.closedAt,
+                    lastSyncedFromServiceNow: mapping.lastSyncedFromServiceNow,
+                    lastSyncedToServiceNow: mapping.lastSyncedToServiceNow,
+                    cassetName: mapping.cassetName,
+                    cassetStatus: mapping.cassetStatus,
                 }))
             
             // Combine all tickets - local tickets first, then ServiceNow-only tickets
