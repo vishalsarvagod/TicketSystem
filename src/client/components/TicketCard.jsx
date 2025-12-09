@@ -127,20 +127,16 @@ export default function TicketCard({ ticket, onViewDetails, onEdit, onSync, onDe
             </div>
 
             <div className="ticket-card-footer">
-                {ticket.serviceNowNumber && (
-                    <button className="btn-servicenow" onClick={openInServiceNow} title="Open in ServiceNow">
-                        🔗 Open in ServiceNow
-                    </button>
-                )}
                 <button className="btn-view" onClick={() => onViewDetails(ticket)} title="View Details">
-                    👁️ View
+                    �️ View
                 </button>
-                <button className="btn-edit" onClick={() => onEdit(ticket)} title="Edit Ticket">
-                    ✏️ Edit
-                </button>
-                {!ticket.serviceNowNumber && (
-                    <button className="btn-sync" onClick={() => onSync(ticket)} title="Sync to ServiceNow">
-                        🔄 Sync
+                {ticket.serviceNowNumber ? (
+                    <button className="btn-edit" onClick={openInServiceNow} title="Edit in ServiceNow">
+                        ✏️ Edit
+                    </button>
+                ) : (
+                    <button className="btn-edit" onClick={() => onEdit(ticket)} title="Edit Ticket">
+                        ✏️ Edit
                     </button>
                 )}
                 <button className="btn-delete" onClick={() => onDelete(ticket)} title="Delete Ticket">

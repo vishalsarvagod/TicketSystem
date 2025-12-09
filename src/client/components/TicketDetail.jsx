@@ -4,7 +4,7 @@ import './TicketDetail.css'
 export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefresh, externalTicketService }) {
     const [comment, setComment] = useState('')
     const [submittingComment, setSubmittingComment] = useState(false)
-    const [refreshing, setRefreshing] = useState(false)
+    const [infoExpanded, setInfoExpanded] = useState(false) // Collapsed by default to show comments
 
     const formatDate = (dateString) => {
         if (!dateString) return 'N/A'
@@ -34,24 +34,6 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
             alert('Failed to add comment: ' + error.message)
         } finally {
             setSubmittingComment(false)
-        }
-    }
-
-    const handleRefreshFromServiceNow = async () => {
-        if (!ticket.serviceNowNumber) {
-            alert('This ticket is not synced to ServiceNow')
-            return
-        }
-
-        try {
-            setRefreshing(true)
-            await externalTicketService.refreshIncidentByNumber(ticket.serviceNowNumber)
-            onRefresh()
-            alert('Ticket refreshed from ServiceNow successfully')
-        } catch (error) {
-            alert('Failed to refresh from ServiceNow: ' + error.message)
-        } finally {
-            setRefreshing(false)
         }
     }
 
@@ -123,31 +105,31 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
 
                 {/* Action Buttons */}
                 <div className="ticket-detail-actions">
-                    {ticket.serviceNowNumber && (
-                        <button className="action-btn servicenow-btn" onClick={openInServiceNow}>
-                            🔗 Open in ServiceNow
-                        </button>
-                    )}
-                    <button className="action-btn edit-btn" onClick={() => onEdit(ticket)}>
-                        ✏️ Edit
+                    <button className="action-btn dispatch-btn" onClick={() => alert('Dispatch functionality coming soon')}>
+                        � Dispatch
                     </button>
-                    <button className="action-btn delete-btn" onClick={() => onDelete(ticket)}>
-                        🗑️ Delete
+                    <button className="action-btn escalate-btn" onClick={() => alert('Escalate functionality coming soon')}>
+                        ⬆️ Escalate
                     </button>
-                    {ticket.status !== 'Resolved' && (
-                        <button className="action-btn resolve-btn">✅ Resolve</button>
-                    )}
-                    {ticket.status !== 'Closed' && (
-                        <button className="action-btn close-btn">🔒 Close</button>
-                    )}
+                    <button className="action-btn transfer-btn" onClick={() => alert('Transfer functionality coming soon')}>
+                        ↔️ Transfer
+                    </button>
                 </div>
 
                 {/* Scrollable Content */}
                 <div className="ticket-detail-content">
-                    {/* Information Section */}
-                    <section className="info-section">
-                        <h3>Ticket Information</h3>
-                        <table className="info-table">
+                    {/* Information Section - Collapsible */}
+                    <section className={`info-section ${infoExpanded ? 'expanded' : 'collapsed'}`}>
+                        <h3 
+                            className="collapsible-header" 
+                            onClick={() => setInfoExpanded(!infoExpanded)}
+                        >
+                            <span className="collapse-icon">{infoExpanded ? '▼' : '▶'}</span>
+                            Ticket Information
+                            {!infoExpanded && <span className="collapsed-hint">(Click to expand)</span>}
+                        </h3>
+                        {infoExpanded && (
+                            <table className="info-table">
                             <tbody>
                                 <tr>
                                     <td className="label">ID</td>
@@ -253,6 +235,7 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                 )}
                             </tbody>
                         </table>
+                        )}
                     </section>
 
                     {/* Comments Section */}
@@ -287,40 +270,6 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                 {submittingComment ? 'Adding...' : 'Add Comment'}
                             </button>
                         </form>
-                    </section>
-
-                    {/* Sync Information */}
-                    <section className="sync-section">
-                        <h3>ServiceNow Sync Information</h3>
-                        <table className="info-table">
-                            <tbody>
-                                <tr>
-                                    <td className="label">Last Synced to ServiceNow</td>
-                                    <td className="value">{formatDate(ticket.lastSyncedToServiceNow)}</td>
-                                </tr>
-                                <tr>
-                                    <td className="label">Last Synced from ServiceNow</td>
-                                    <td className="value">{formatDate(ticket.lastSyncedFromServiceNow)}</td>
-                                </tr>
-                                <tr>
-                                    <td className="label">Sync Status</td>
-                                    <td className="value">
-                                        <span className={`sync-status ${ticket.syncStatus?.toLowerCase()}`}>
-                                            {ticket.syncStatus || 'Not Synced'}
-                                        </span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        {ticket.serviceNowNumber && (
-                            <button
-                                className="refresh-btn"
-                                onClick={handleRefreshFromServiceNow}
-                                disabled={refreshing}
-                            >
-                                {refreshing ? '🔄 Refreshing...' : '🔄 Refresh from ServiceNow'}
-                            </button>
-                        )}
                     </section>
                 </div>
             </div>

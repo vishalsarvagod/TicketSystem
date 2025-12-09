@@ -147,6 +147,34 @@
     background: #1565c0;
 }
 
+/* New Action Buttons */
+.dispatch-btn {
+    background: #17a2b8;
+    color: white;
+}
+
+.dispatch-btn:hover {
+    background: #138496;
+}
+
+.escalate-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.escalate-btn:hover {
+    background: #c82333;
+}
+
+.transfer-btn {
+    background: #6f42c1;
+    color: white;
+}
+
+.transfer-btn:hover {
+    background: #5a32a3;
+}
+
 .ticket-detail-content {
     flex: 1;
     overflow-y: auto;
@@ -168,6 +196,40 @@ section h3 {
     margin: 0 0 15px 0;
     padding-bottom: 10px;
     border-bottom: 2px solid #e9ecef;
+}
+
+/* Collapsible Info Section */
+.collapsible-header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.collapsible-header:hover {
+    color: #3498db;
+}
+
+.collapse-icon {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.collapsed-hint {
+    font-size: 12px;
+    color: #adb5bd;
+    font-weight: 400;
+    margin-left: auto;
+}
+
+.info-section.collapsed {
+    margin-bottom: 15px;
+}
+
+.info-section.collapsed h3 {
+    margin-bottom: 0;
+    border-bottom: 1px solid #e9ecef;
 }
 
 .info-table {
