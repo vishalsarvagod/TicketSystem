@@ -541,6 +541,52 @@ section h3 {
     border-left: 3px solid #c62828;
 }
 
+/* Terminal ID Badge */
+.terminal-badge {
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    letter-spacing: 0.5px;
+}
+
+/* Dispatch Status Badges */
+.dispatch-badge {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: capitalize;
+}
+
+.dispatch-pending {
+    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+    color: #000;
+}
+
+.dispatch-dispatched {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+    color: white;
+}
+
+.dispatch-in-progress, .dispatch-inprogress {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+.dispatch-completed {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+}
+
+.dispatch-cancelled {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+
 /* ServiceNow Comments - Chat Style */
 .sn-comments-section {
     border-radius: 12px;

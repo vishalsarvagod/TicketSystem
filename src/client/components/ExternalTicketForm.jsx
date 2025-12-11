@@ -17,6 +17,9 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
         tags: ticket?.tags?.join(', ') || '',
         cassetName: ticket?.cassetName || '',
         cassetStatus: ticket?.cassetStatus || '',
+        terminalId: ticket?.terminalId || '',
+        location: ticket?.location || '',
+        dispatchStatus: ticket?.dispatchStatus || 'Pending',
     })
 
     const [createInServiceNow, setCreateInServiceNow] = useState(false)
@@ -95,6 +98,9 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
             tags: '',
             cassetName: '',
             cassetStatus: '',
+            terminalId: '',
+            location: '',
+            dispatchStatus: 'Pending',
         })
     }
 
@@ -272,6 +278,44 @@ export default function ExternalTicketForm({ ticket, onSubmit, onCancel, externa
                                     <option value="Full">Full</option>
                                 </select>
                                 <small>Optional - Select casset status</small>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="terminalId">Terminal ID</label>
+                                <input
+                                    type="text"
+                                    id="terminalId"
+                                    name="terminalId"
+                                    value={formData.terminalId}
+                                    onChange={handleChange}
+                                    placeholder="e.g., CA09723"
+                                />
+                                <small>Optional - Enter terminal identifier</small>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="location">Location</label>
+                                <input
+                                    type="text"
+                                    id="location"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    placeholder="e.g., California"
+                                />
+                                <small>Optional - Enter location</small>
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="dispatchStatus">Dispatch Status</label>
+                                <select id="dispatchStatus" name="dispatchStatus" value={formData.dispatchStatus} onChange={handleChange}>
+                                    <option value="Pending">Pending</option>
+                                    <option value="Dispatched">Dispatched</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                    <option value="Cancelled">Cancelled</option>
+                                </select>
+                                <small>Optional - Select dispatch status</small>
                             </div>
                         </div>
 

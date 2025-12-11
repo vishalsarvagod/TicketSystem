@@ -331,6 +331,30 @@ export default function TicketDetail({ ticket, onClose, onEdit, onDelete, onRefr
                                         </td>
                                     </tr>
                                 )}
+                                {ticket.terminalId && (
+                                    <tr>
+                                        <td className="label">Terminal ID</td>
+                                        <td className="value">
+                                            <span className="terminal-badge">{ticket.terminalId}</span>
+                                        </td>
+                                    </tr>
+                                )}
+                                {ticket.location && (
+                                    <tr>
+                                        <td className="label">Location</td>
+                                        <td className="value">{ticket.location}</td>
+                                    </tr>
+                                )}
+                                {ticket.dispatchStatus && (
+                                    <tr>
+                                        <td className="label">Dispatch Status</td>
+                                        <td className="value">
+                                            <span className={`dispatch-badge dispatch-${ticket.dispatchStatus.toLowerCase()}`}>
+                                                {ticket.dispatchStatus}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                )}
                                 {ticket.syncStatus === 'Error' && ticket.syncErrorMessage && (
                                     <tr>
                                         <td className="label">Sync Error</td>

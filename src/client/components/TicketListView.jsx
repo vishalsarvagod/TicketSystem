@@ -102,6 +102,10 @@ export default function TicketListView({
                         syncErrorMessage: mapping.syncErrorMessage,
                         cassetName: mapping.cassetName || ticket.cassetName,
                         cassetStatus: mapping.cassetStatus || ticket.cassetStatus,
+                        // New ServiceNow fields
+                        dispatchStatus: mapping.dispatchStatus,
+                        terminalId: mapping.terminalId,
+                        location: mapping.location,
                     }
                 }
                 return ticket
@@ -141,6 +145,10 @@ export default function TicketListView({
                     lastSyncedToServiceNow: mapping.lastSyncedToServiceNow,
                     cassetName: mapping.cassetName,
                     cassetStatus: mapping.cassetStatus,
+                    // New ServiceNow fields
+                    dispatchStatus: mapping.dispatchStatus,
+                    terminalId: mapping.terminalId,
+                    location: mapping.location,
                 }))
             
             // Combine all tickets - local tickets first, then ServiceNow-only tickets

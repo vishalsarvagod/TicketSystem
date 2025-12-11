@@ -16,6 +16,8 @@ export default function ServiceNowTickets({ externalTicketService }) {
     const [statusFilter, setStatusFilter] = useState('All')
     const [priorityFilter, setPriorityFilter] = useState('All')
     const [categoryFilter, setCategoryFilter] = useState('All')
+    const [terminalIdSearch, setTerminalIdSearch] = useState('')
+    const [locationSearch, setLocationSearch] = useState('')
     const [sortBy, setSortBy] = useState('created-desc')
     
     // Ref for interval cleanup
@@ -90,6 +92,20 @@ export default function ServiceNowTickets({ externalTicketService }) {
         // Apply category filter
         if (categoryFilter !== 'All') {
             filtered = filtered.filter(m => m.category === categoryFilter)
+        }
+
+        // Apply Terminal ID search
+        if (terminalIdSearch.trim()) {
+            filtered = filtered.filter(m => 
+                m.terminalId?.toLowerCase().includes(terminalIdSearch.toLowerCase().trim())
+            )
+        }
+
+        // Apply Location search
+        if (locationSearch.trim()) {
+            filtered = filtered.filter(m => 
+                m.location?.toLowerCase().includes(locationSearch.toLowerCase().trim())
+            )
         }
 
         // Sort
@@ -245,6 +261,47 @@ export default function ServiceNowTickets({ externalTicketService }) {
                         </select>
                     </div>
                 </div>
+
+                {/* Search Filters */}
+                <div className="search-filters-row">
+                    <div className="search-group">
+                        <label>🔍 Terminal ID</label>
+                        <input
+                            type="text"
+                            placeholder="Search by Terminal ID..."
+                            value={terminalIdSearch}
+                            onChange={(e) => setTerminalIdSearch(e.target.value)}
+                        />
+                        {terminalIdSearch && (
+                            <button className="clear-search" onClick={() => setTerminalIdSearch('')}>✕</button>
+                        )}
+                    </div>
+
+                    <div className="search-group">
+                        <label>📍 Location</label>
+                        <input
+                            type="text"
+                            placeholder="Search by Location..."
+                            value={locationSearch}
+                            onChange={(e) => setLocationSearch(e.target.value)}
+                        />
+                        {locationSearch && (
+                            <button className="clear-search" onClick={() => setLocationSearch('')}>✕</button>
+                        )}
+                    </div>
+
+                    {(terminalIdSearch || locationSearch) && (
+                        <button 
+                            className="clear-all-btn"
+                            onClick={() => {
+                                setTerminalIdSearch('')
+                                setLocationSearch('')
+                            }}
+                        >
+                            Clear All Searches
+                        </button>
+                    )}
+                </div>
             </div>
 
             {/* Tickets Table */}
@@ -259,6 +316,9 @@ export default function ServiceNowTickets({ externalTicketService }) {
                             <tr>
                                 <th>Incident #</th>
                                 <th>Description</th>
+                                <th>Terminal ID</th>
+                                <th>Location</th>
+                                <th>Dispatch</th>
                                 <th>Status</th>
                                 <th>Priority</th>
                                 <th>Category</th>
@@ -275,6 +335,25 @@ export default function ServiceNowTickets({ externalTicketService }) {
                                     </td>
                                     <td className="description-cell">
                                         {mapping.title || mapping.description || 'No description'}
+                                    </td>
+                                    <td className="terminal-cell">
+                                        {mapping.terminalId ? (
+                                            <span className="terminal-badge">{mapping.terminalId}</span>
+                                        ) : (
+                                            <span className="na-text">-</span>
+                                        )}
+                                    </td>
+                                    <td className="location-cell">
+                                        {mapping.location || <span className="na-text">-</span>}
+                                    </td>
+                                    <td className="dispatch-cell">
+                                        {mapping.dispatchStatus ? (
+                                            <span className={`dispatch-badge dispatch-${mapping.dispatchStatus.toLowerCase().replace(' ', '-')}`}>
+                                                {mapping.dispatchStatus}
+                                            </span>
+                                        ) : (
+                                            <span className="na-text">-</span>
+                                        )}
                                     </td>
                                     <td>
                                         <span className={`status-badge ${getStatusClass(mapping.status)}`}>
